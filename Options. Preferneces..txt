@@ -1,0 +1,99 @@
+Options. Preferneces.
+Always show port labels
+Show device named
+
+Pc neetzetten copper straight trough op fastethernet naar poort 24 = vlan 30
+
+10.30.0.110 
+255.255.0.0
+Gateway 10.30.0.6
+
+Command prompt ping naar switch. 10.30.0.6
+Ping 10.30.0.6
+
+Cli switch
+En
+Show lldp neighbors
+
+Ssh ? 
+
+Ssh -v 2 -l admin 10.30.0.2
+
+En
+Show lldp neighbors
+
+Show ip int brief
+
+Nog een pc neerzetten console op rs232 naar het midden op console aansluiten
+
+Terminal
+
+En
+Show lldp neighbors
+
+Show ip interface brief
+
+Conf t
+Int g1/0/19
+Shutdown
+
+No shutdown om weer aan te doen
+
+Int g1/0/20
+Shutdown
+
+No shutdown
+
+Zo kan je zien dat de servers erop zitten
+
+
+Do show ip int br
+
+Exit
+
+Exit
+
+Show lldp neighbors
+
+Ssh -v 2 -l admin 172.16.0.2
+
+Je gaat in de apparaten can de nieuw ontdekte apparaat
+
+Show lldp neighbors
+
+Show ip int br
+
+Ssh -v 2 -l admin 172.16.20.5
+
+En
+Lldp neighbors
+Show ip int br
+
+Ssh -v 2 -l admin 172.16.20.2
+Show Lldp neighbors
+
+Ip int br
+10.10.0.100 
+
+Conf t
+Int g0/0/0 
+
+Shutdown
+
+Ping 10.10.0.100
+No shutdown
+
+Do show ip int brief
+
+Do ping 10.10.0.100
+
+
+
+
+
+Show interfaces switchport
+Show interfaces gigabitethernet switchport
+
+Show interfaces ?
+
+Show run
