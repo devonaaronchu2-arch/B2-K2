@@ -1,0 +1,215 @@
+Omschrijving
+
+“Trunks staan alleen open voor bekende VLAN’s” — Uitleg
+
+Op een Cisco-switch kan een trunkpoort meerdere VLAN’s tegelijk vervoeren. Die trunk stuurt Ethernetframes over één fysieke verbinding, maar tagt ze met een 802.1Q VLAN-tag zodat de ontvangende switch weet bij welk VLAN het frame hoort.
+Wanneer men zegt dat “trunks alleen openstaan voor bekende VLAN’s”, betekent dit het volgende:
+Een trunk accepteert en transporteert alleen VLAN’s die op die switch zijn aangemaakt (bekend zijn).
+VLAN’s die niet bestaan in de VLAN-database van de switch worden niet doorgestuurd over de trunk.
+De trunk filtert dus automatisch onbekende VLAN-ID’s, omdat de switch niet weet hoe ze moeten worden verwerkt.
+
+
+Daarnaast kun je op een trunk ook expliciet instellen welke VLAN’s zijn toegestaan:
+
+switchport trunk allowed vlan 10,20,30
+
+In dat geval transporteert de trunk alleen deze specifiek toegelaten VLAN’s, ook al bestaan er op de switch meer VLAN’s.
+
+Kort samengevat
+
+Een trunk stuurt alleen verkeer door van VLAN’s die de switch kent én die zijn toegestaan op de trunk. Onbekende of niet-geconfigureerde VLAN’s worden genegeerd.
+
+
+
+
+Uitvoering
+
+
+Enable
+
+Show interfaces trunk
+
+
+
+
+Verwachting
+
+Dit krijg je Daggoes <------------------------------------------------------- on bro barry is not funny 
+
+
+
+Port Mode Encapsulation Status Native vlan
+
+Gig0/1 on 802.1q trunking 1
+
+Port Vlans allowed on trunk
+
+Gig0/1 1-1005
+
+Port Vlans allowed and active in management domain
+
+Gig0/1 1,10,90
+
+Port Vlans in spanning tree forwarding state and not pruned
+
+Gig0/1 1,10,90
+
+
+
+
+
+
+
+
+
+Impact
+
+Het verkeerd configureren van trunkpoorten kan aanzienlijke risico’s met zich meebrengen binnen de netwerkstructuur. Wanneer trunk links meer VLAN’s toestaan dan strikt noodzakelijk, ontstaan de volgende potentiële problemen:
+
+
+1. Verhoogd risico op ongeautoriseerde netwerktoegang
+
+Wanneer alle of te veel VLAN’s over een trunk worden doorgelaten, kan een systeem of switch die toegang krijgt tot die trunkpoten toegang krijgen tot meerdere netwerksegmenten. 
+
+Dit kan leiden tot:
+Onbedoelde toegang van clients tot afgeschermde VLAN’s
+Vergrote kans op privilege escalation
+Vergroot aanvalsoppervlak bij een compromittering van één enkel apparaat
+
+Zeker in omgevingen waar gevoelige data gescheiden moet blijven (bijv. management-, gast-, voice- en productie-VLAN’s) vormt dit een aanzienlijk beveiligingsrisico.
+
+
+2. Hogere kans op VLAN hopping-aanvallen
+
+Als trunkpoorten niet beperkt worden tot bekende/benodigde VLAN’s, wordt VLAN hopping eenvoudiger. 
+
+Dit stelt een aanvaller in staat:
+Verkeer van een ander VLAN te onderscheppen
+Zich voor te doen als onderdeel van een ander VLAN
+Interne segmentatie te omzeilen
+
+VLAN hopping is een bekende aanvalstechniek die vaak misbruikt wordt in slecht gesegmenteerde netwerken.
+
+
+3. Impact op netwerkprestaties
+
+Wanneer trunk links onnodig veel VLAN’s toestaan:
+Wordt broadcast en multicast verkeer doorgegeven naar netwerkdelen waar dit niet nodig is
+Ontstaat extra belasting op uplinks
+Bestaat het risico op vertragingen bij hoge netwerkbelasting
+
+Vooral bij groei van het netwerk kan dit leiden tot prestatieproblemen.
+
+
+4. Verminderde controle en compliancy-schendingen
+
+Een netwerk waarin trunks zomaar alle VLAN’s doorlaten voldoet niet aan gangbare best practices. 
+
+Dit kan negatieve gevolgen hebben voor:
+Security-audits
+Compliance-eisen (bijv. ISO 27001, NEN 7510 of interne IT-beleidseisen)
+Beheer en troubleshooting
+Trunkpoorten waarbij onbekende VLAN’s worden doorgelaten maken het beheer complexer en vergroten de kans op menselijke fouten.
+
+
+
+
+
+
+
+
+
+
+
+Advies
+
+Om de betrouwbaarheid, veiligheid en beheersbaarheid van het netwerk te verhogen, adviseren we de volgende maatregelen:
+
+
+1. Beperk trunkpoorten tot alleen benodigde VLAN’s
+
+Configureer alle trunkpoorten handmatig zodat ze uitsluitend de VLAN’s doorlaten die daadwerkelijk vereist zijn voor communicatie over die verbinding. Bijvoorbeeld:
+
+interface Gi0/1
+ switchport trunk allowed vlan 10,90
+
+
+Voorkom het gebruik van:
+switchport trunk allowed vlan all
+
+Want dit opent de trunk voor alle VLAN’s.
+
+
+2. Verwijder ongewenste VLAN’s direct van trunks
+
+Loop alle actieve trunkpoorten na en verwijder VLAN’s die niet gebruikt worden voor routing, management of inter-switch communicatie. Dit minimaliseert het risico op ongeautoriseerde toegang.
+
+switchport trunk allowed vlan remove 100-200
+
+
+3. Valideer de native VLAN-configuratie
+
+Zorg ervoor dat:
+
+De native VLAN gelijk is op beide uiteinden van de trunk
+
+De native VLAN niet VLAN 1 is
+
+De native VLAN niet als access-VLAN op normale poorten gebruikt wordt
+
+Voorbeeld:
+
+switchport trunk native vlan 99
+
+Een speciale, niet-productie VLAN voor native traffic verhoogt de veiligheid.
+
+
+4. Harden alle trunkpoorten
+
+Implementeer best practices om trunkpoorten extra te beveiligen:
+
+Disable DTP (Dynamic Trunking Protocol) om te voorkomen dat poorten ongewenst trunk worden
+
+
+switchport nonegotiate
+
+
+Gebruik Port Security op accesspoorten om te voorkomen dat devices op een verkeerde poort trunking initiëren
+
+Schakel ongebruikte poorten uit en plaats ze in een “blackhole VLAN” (bijv. VLAN 999)
+
+
+5. Documenteer VLAN-toewijzingen en trunkconfiguratie
+
+Een duidelijke netwerkdocumentatie draagt bij aan:
+Eenvoudiger beheer
+Snellere incidentoplossing
+Minder configuratiefouten
+Betere controle tijdens audits
+
+Documenteer voor elke trunk:
+Welke VLAN’s zijn toegestaan
+De native VLAN
+De functie van de verbinding
+
+
+6. Monitor regelmatig via ‘show interfaces trunk’
+
+Voer periodiek controles uit om te bevestigen dat er geen VLAN’s onbedoeld weer zijn toegevoegd door configuratie-updates of nieuwe devices.
+
+
+
+
+
+Samenvatting
+
+Beperk trunkpoorten tot enkel de vereiste VLAN’s om veiligheidsrisico’s, prestatieproblemen en compliancy-issues te voorkomen. 
+Door het toepassen van strikte VLAN-segmentatie, native VLAN-hardening en DTP-disabling wordt het netwerk aanzienlijk veiliger en eenvoudiger beheersbaar.
+
+
+
+
+
+
+
+
