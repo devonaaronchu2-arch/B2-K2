@@ -1,0 +1,361 @@
+Er zijn 2 afwijking lijsten. u pick which one u think is better (prolly the 2nd one)
+
+In het midden zie je zo een afwijking lijst. daaronder kom je later een ------------------------- tegen waaronder een meer
+uitgebereide versie is (i recommend  that one)
+
+
+Controleer op aanwezigheid IOS startup-config
+Voldoende poorten voor geplande uitbreiding
+Update IOS van device X
+IOS-versies controleren / opvragen
+Syslog: alle events worden verzameld
+NTP: service is geactiveerd
+FTP: anonymous account disabled
+FTP: back-up's van devices aanwezig
+DHCP: voldoende IP-adressen gereserveerd
+Routing OSPF, Default Passive interface enabled
+ACL is ingezet tussen VLAN's
+Switchpoort dynamic access is geblokkeerd
+DTP is overal disabled
+BPDU-guard is enabled
+Portfast is enabled voor VLAN xx?
+VLAN 1 is op geen enkel device actief
+Trunks staan alleen open voor bekende VLAN's
+Spanning Tree isactief, MLS is de rootbridge
+DHCP-snooping is geactiveerd
+Ongebruikte poorten staan shutdown
+Port security enabled, maximaal 4 users
+Wachtwoord op console is geconfigureerd
+Priviledge password set
+Wachtwoorden zijn versleuteld opgeslagen
+Telnet is niet actief
+SSH-toegang is geactiveerd
+Event logging is enabled
+NTP-Clients is geactiveerd
+
+
+
+
+
+
+
+Controleer op aanwezigheid IOS startup-config
+→ Startup-config komt niet overeen met running-config (niet opgeslagen).
+
+
+Voldoende poorten voor geplande uitbreiding
+→ Meerdere poorten nog in gebruik / niet shutdown waardoor capaciteit onduidelijk is.
+
+
+Update IOS van device X
+→ Device X draait nog een oudere IOS-versie dan de rest.
+
+
+IOS-versies controleren / opvragen
+→ Geen eenduidige versies; sommige devices gebruiken afwijkende IOS.
+
+
+Syslog: alle events worden verzameld
+→ Niet alle switches sturen logs naar de syslog-server.
+
+
+NTP: service is geactiveerd
+→ NTP staat aan maar niet alle devices synchroniseren.
+
+
+FTP: anonymous account disabled
+→ Anonymous login staat nog steeds enabled.
+
+
+FTP: back-ups van devices aanwezig
+→ Niet alle switches hebben een back-upbestand op de FTP-server.
+
+
+DHCP: voldoende IP-adressen gereserveerd
+→ Pool is bijna vol of te klein voor toekomstige hosts.
+
+
+Routing OSPF, Default Passive interface enabled
+→ Sommige interfaces die in OSPF moeten zitten staan per ongeluk op passive.
+
+
+ACL is ingezet tussen VLAN's
+→ ACL wordt niet op de juiste interface toegepast of ontbreekt volledig.
+
+
+Switchpoort dynamic access is geblokkeerd
+→ Access-poorten staan nog op dynamic auto.
+
+
+DTP is overal disabled
+→ Trunkpoorten staan nog op dynamic desirable of auto.
+
+
+BPDU-guard is enabled
+→ Niet alle access-poorten hebben BPDU-guard ingeschakeld.
+
+
+Portfast is enabled voor VLAN xx?
+→ Sommige access-poorten missen spanning-tree portfast.
+
+
+VLAN 1 is op geen enkel device actief
+→ VLAN 1 wordt nog gebruikt op management interface of trunk allowed list.
+
+
+Trunks staan alleen open voor bekende VLAN's
+→ Sommige trunkpoorten hebben nog allowed vlan all.
+
+
+Spanning Tree is actief, MLS is de rootbridge
+→ Een andere switch is root (prioriteit MLS te hoog).
+
+
+DHCP-snooping is geactiveerd
+→ Trusted interfaces ontbreken of database-agent ontbreekt.
+
+
+Ongebruikte poorten staan shutdown
+→ Meerdere ongebruikte poorten staan nog open.
+
+
+Port security enabled, maximaal 4 users
+→ Sommige poorten hebben geen port-security of een lager maximum.
+
+
+Wachtwoord op console is geconfigureerd
+→ Console gebruikt geen login of geen veilig wachtwoord.
+
+
+Privileged password set
+→ enable secret ontbreekt; alleen onveilig enable password aanwezig.
+
+
+Wachtwoorden zijn versleuteld opgeslagen
+→ service password-encryption ontbreekt op sommige devices.
+
+
+Telnet is niet actief
+→ Telnet staat wél actief op meerdere devices.
+
+
+SSH-toegang is geactiveerd
+→ SSH is niet volledig geconfigureerd (ontbrekende key/domain-name).
+
+
+Event logging is enabled
+→ Niet alle switches sturen logs naar de centrale server.
+
+
+NTP-Clients is geactiveerd
+→ Sommige clients tonen geen synchronisatie (* ontbreekt).
+
+
+
+-------------------------------------------------------------------------------------------
+
+
+1. Controleer op aanwezigheid IOS startup-config
+
+Afwijking: De startup-config komt niet overeen met de running-config.
+Gevolg: Instellingen gaan verloren bij een reboot van het apparaat.
+
+
+
+2. Voldoende poorten voor geplande uitbreiding
+
+Afwijking: Meerdere poorten staan nog actief of in verkeerd gebruik, waardoor niet duidelijk is hoeveel poorten vrij zijn.
+Gevolg: Uitbreiding kan vertraging oplopen omdat vrije capaciteit niet zeker is.
+
+
+
+3. Update IOS van device X
+
+Afwijking: Device X draait een oudere IOS-versie dan de rest.
+Gevolg: Mogelijke veiligheidsrisico’s of incompatibiliteit met nieuwe functies.
+
+
+
+4. IOS-versies controleren / opvragen
+
+Afwijking: Niet alle switches draaien dezelfde IOS-versie.
+Gevolg: Inconsistent gedrag in het netwerk en lastigere probleemoplossing.
+
+
+
+5. Syslog: alle events worden verzameld
+
+Afwijking: Niet alle devices sturen logs naar de syslog-server.
+Gevolg: Onvolledige netwerklogging; belangrijke gebeurtenissen kunnen worden gemist.
+
+
+
+6. NTP: service is geactiveerd
+
+Afwijking: NTP staat wel aan, maar sommige devices synchroniseren niet.
+Gevolg: Logbestanden hebben verkeerde tijdstempels, wat troubleshooting moeilijker maakt.
+
+
+
+7. FTP: anonymous account disabled
+
+Afwijking: Anonymous login staat nog actief.
+Gevolg: Onbeveiligde toegang mogelijk naar configuratiebestanden.
+
+
+
+8. FTP: back-ups van devices aanwezig
+
+Afwijking: Niet alle switches hebben een back-upbestand op de FTP-server.
+Gevolg: Bij een probleem kan niet elke switch snel worden hersteld.
+
+
+
+9. DHCP: voldoende IP-adressen gereserveerd
+
+Afwijking: De DHCP-pool is te klein of bijna vol.
+Gevolg: Nieuwe apparaten krijgen mogelijk geen IP-adres.
+
+
+
+10. Routing OSPF, Default Passive interface enabled
+
+Afwijking: Sommige interfaces die moeten deelnemen aan OSPF staan onterecht op passive.
+Gevolg: OSPF-buren worden niet opgebouwd.
+
+
+
+11. ACL is ingezet tussen VLAN's
+
+Afwijking: ACL’s ontbreken of staan op de verkeerde interface.
+Gevolg: Ongewenst verkeer tussen VLAN’s is mogelijk, of juist te veel geblokkeerd.
+
+
+
+12. Switchpoort dynamic access is geblokkeerd
+
+Afwijking: Access-poorten staan nog op dynamic auto.
+Gevolg: Ongewenste trunking kan ontstaan via DTP.
+
+
+
+13. DTP is overal disabled
+
+Afwijking: Sommige poorten gebruiken nog dynamic desirable/auto.
+Gevolg: Apparaten kunnen onbedoeld trunk-verbindingen opzetten.
+
+
+
+14. BPDU-guard is enabled
+
+Afwijking: Niet alle access-poorten hebben BPDU-guard ingeschakeld.
+Gevolg: Een kwaadwillende of foutieve switch kan spanning-tree verstoren.
+
+
+
+15. Portfast is enabled voor VLAN xx?
+
+Afwijking: Portfast ontbreekt op diverse access-poorten.
+Gevolg: Werkplekken krijgen langzamer netwerkverbinding bij opstarten.
+
+
+
+16. VLAN 1 is op geen enkel device actief
+
+Afwijking: VLAN 1 wordt nog gebruikt voor management of staat open op trunks.
+Gevolg: Onnodig beveiligingsrisico omdat VLAN 1 standaard is.
+
+
+
+17. Trunks staan alleen open voor bekende VLAN's
+
+Afwijking: Trunks staan nog ingesteld op allowed vlan all.
+Gevolg: Onnodige VLAN’s kunnen over de trunks lopen (veiligheidsrisico).
+
+
+
+18. Spanning Tree actief, MLS is rootbridge
+
+Afwijking: Een andere switch dan MLS is root bridge.
+Gevolg: Suboptimale routing en kans op loops.
+
+
+
+19. DHCP-snooping is geactiveerd
+
+Afwijking: Niet alle trunkpoorten staan als trusted; snooping database ontbreekt.
+Gevolg: DHCP-verkeer kan geblokkeerd worden of niet worden gelogd.
+
+
+
+20. Ongebruikte poorten staan shutdown
+
+Afwijking: Verschillende ongebruikte poorten staan nog open.
+Gevolg: Onbevoegde apparaten kunnen worden aangesloten.
+
+
+
+21. Port security enabled, maximaal 4 users
+
+Afwijking: Port-security ontbreekt op sommige access-poorten of limiet is te laag/hoog.
+Gevolg: Ongecontroleerde toegang via werkplekken.
+
+
+
+22. Wachtwoord op console is geconfigureerd
+
+Afwijking: Console-login heeft geen wachtwoord of gebruikt een zwak wachtwoord.
+Gevolg: Iedereen met fysieke toegang kan het device configureren.
+
+
+
+23. Privileged password set
+
+Afwijking: enable secret ontbreekt, slechts enable password aanwezig.
+Gevolg: Beheerwachtwoord is makkelijk te kraken.
+
+
+
+24. Wachtwoorden zijn versleuteld opgeslagen
+
+Afwijking: service password-encryption staat niet aan.
+Gevolg: Wachtwoorden verschijnen leesbaar in de config.
+
+
+
+25. Telnet is niet actief
+
+Afwijking: Telnet staat wél actief.
+Gevolg: Onversleutelde (onveilige) remote toegang.
+
+
+
+26. SSH-toegang is geactiveerd
+
+Afwijking: SSH is niet volledig geconfigureerd (sleutels of domain-name ontbreken).
+Gevolg: Remote beheer is mogelijk onveilig of werkt niet stabiel.
+
+
+
+27. Eventlogging is enabled
+
+Afwijking: Logging staat lokaal aan, maar niet alle devices sturen logs door naar de syslog-server.
+Gevolg: Incomplete monitoring van netwerkgebeurtenissen.
+
+
+
+28. NTP-Clients is geactiveerd
+
+Afwijking: Sommige devices maken geen tijdsynchronisatie met de server.
+Gevolg: Verschillende tijdstempels in logs → troubleshooting moeilijker.
+
+
+
+
+
+
+
+
+
+
+
