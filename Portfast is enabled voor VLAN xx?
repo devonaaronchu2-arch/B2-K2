@@ -1,0 +1,212 @@
+Omschrijving
+
+Portfast doet twee dingen voor ons:
+
+- Interfaces met portfast ingeschakeld gaan onmiddellijk naar de doorstuurmodus. De interface slaat de luister- en leerstatus over.
+- Een switch genereert nooit een melding voor het wijzigen van de topologie voor een interface waarvoor portfast is ingeschakeld.
+
+Het is een goed idee om portfast in te schakelen op interfaces die zijn aangesloten op hosts, omdat deze interfaces waarschijnlijk de hele tijd op en neer gaan. Schakel portfast niet in op een interface naar een andere hub of switch
+
+Bron: https://networklessons.com/cisco/ccie-routing-switching-written/cisco-portfast-configuration          
+
+
+
+
+Uitvoering 
+
+RESULTAAT WANNEER PORT FAST UIT STAAT <--------------------------- LOOK WHAT THIS SAYS PLEASE ER STAAT UIT
+
+SW1# show spanning-tree interface (port) detail
+
+Port 1 (FastEthernet0/1) of VLAN0001 is designated forwarding
+  Port path cost 19, Port priority 128, Port identifier 128.1
+  Designated root has priority 32769, address 000C.851D.C4CA
+  Designated bridge has priority 32769, address 000C.851D.C4CA
+  Designated port id is 128.1, designated path cost 19
+  Timers: message age 16, forward delay 0 hold 0
+  Number of transitions to forwarding state: 1
+  Link type is point-to-point by default
+Swtich#
+
+
+
+
+RESULTAAT WANNEER PORT FAST AAN STAAT <--------------------------- LOOK WHAT THIS SAYS PLEASE ER STAAN AAN
+
+SW1# show spanning-tree interface (port) detail
+
+Port 1 (FastEthernet0/1) of VLAN0001 is designated forwarding
+  Port path cost 19, Port priority 128, Port identifier 128.1
+  Designated root has priority 32769, address 000C.851D.C4CA
+  Designated bridge has priority 32769, address 000C.851D.C4CA
+  Designated port id is 128.1, designated path cost 19
+  Timers: message age 16, forward delay 0 hold 0
+  Number of transitions to forwarding state: 1
+  The port is in the portfast mode <-------------------------------- OMCIRKEL DIT
+  Link type is point-to-point by default
+Swtich#
+
+
+
+
+
+Verwachting
+
+Wanneer je de commando uitvoert en portfast staat uit krijg je er niet tussen te zien dat hij aan staat. Wanneer wel ingeschakeld krijg je hem er wel tussen te staan.
+
+
+
+
+
+
+
+
+
+
+
+
+
+Impact
+
+Het niet ingeschakeld hebben van PortFast op access-poorten kan merkbare gevolgen hebben voor de prestaties en stabiliteit van het netwerk, met name voor apparaten die afhankelijk zijn van een snelle en stabiele netwerkverbinding.
+
+
+1. Langzame netwerkverbinding bij opstartende apparaten
+
+Zonder PortFast doorlopen access-poorten de volledige STP-convergentie (Listening → Learning → Forwarding).
+Dit proces duurt 15 tot 30 seconden, waardoor eindgebruikersapparatuur pas later netwerktoegang krijgt.
+
+Dit kan leiden tot:
+trage verbinding bij het opstarten van pc’s,
+problemen bij het aanmelden op domeinen,
+vertragingen in het verkrijgen van een IP-adres via DHCP,
+time-outs bij VoIP-telefoons (waardoor gesprekken niet tot stand komen).
+Voor zakelijke werkplekken en telefonie is deze vertraging vaak merkbaar en storend.
+
+
+2. Onnodige belasting van Spanning Tree Protocol (STP)
+
+Access-poorten die geen PortFast gebruiken worden irrelevant meegenomen in STP-calculations.
+
+Hierdoor:
+kan STP meer tijd nodig hebben om te convergeren in het gehele netwerk,
+wordt CPU op switches onnodig gebruikt,
+ontstaan risico’s dat eindapparatuur STP-proces beïnvloedt.
+Hoe groter het netwerk, hoe groter deze impact.
+
+
+3. Onvoorspelbaar gedrag bij apparaten die vaak aan- en afgekoppeld worden
+
+Vooral in omgevingen met laptops, dockingstations, printers of mobiele apparatuur kan het ontbreken van PortFast leiden tot:
+tijdelijke disconnecties,
+verlies van netwerkconnectiviteit bij het opnieuw verbinden,
+DHCP-leaseproblemen waarbij het apparaat geen IP-adres krijgt.
+
+Dit kan de productiviteit van gebruikers negatief beïnvloeden.
+
+
+4. VoIP-systemen en bedrijfskritische apparaten kunnen uitvallen
+
+VoIP-telefoons zijn zeer gevoelig voor STP-wachttijden. Zonder PortFast kan een telefoon:
+niet registreren bij de call manager,
+geen voeding of verbinding krijgen bij PoE-herstarts,
+gesprekken verliezen bij korte kabelbewegingen.
+
+Dit kan impact hebben op interne en externe communicatie.
+
+
+5. Risico op netwerkloops als PortFast verkeerd toegepast wordt
+
+Hoewel PortFast veilig is op access-poorten, levert het risico op als het per ongeluk geplaatst wordt op trunk-links of tussen switches.
+Daarom is correcte implementatie en documentatie essentieel.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Advies
+
+1. Schakel PortFast in op alle access-poorten die eindgebruikersapparatuur verbinden
+
+PortFast is een best practice in vrijwel alle moderne bedrijfsnetwerken.
+
+Aanbevolen configuratie:
+interface FastEthernet0/x
+ switchport mode access
+ spanning-tree portfast
+
+
+Dit zorgt ervoor dat poorten direct in forwarding gaan zonder de gebruikelijke vertraging.
+
+
+2. Combineer PortFast altijd met BPDU-Guard
+
+Hoewel PortFast het STP-proces versnelt, maakt BPDU-Guard het veilig.
+
+Aanbevolen:
+spanning-tree portfast
+spanning-tree bpduguard enable
+
+
+Deze combinatie:
+voorkomt spanning-tree manipulatie,
+schakelt de poort meteen uit bij ongewenste BPDU’s,
+maakt PortFast veilig voor productieomgevingen.
+
+
+3. Implementeer PortFast niet op uplinks of trunklijnen
+
+Trunkpoorten en uplinks tussen switches mogen nooit PortFast gebruiken.
+Zorg dat er duidelijke documentatie is die alle trunk- en uplinkpoorten identificeert zodat fouten worden voorkomen.
+
+
+4. Documenteer alle poortrollen in het netwerk
+
+Voor een beheersbaar netwerk is het aan te raden vast te leggen:
+welke poorten PortFast gebruiken,
+welk type apparaat op elke poort is aangesloten,
+welke poorten trunk/uplink zijn.
+
+
+Dit voorkomt fouten tijdens toekomstige aanpassingen aan het netwerk.
+
+
+5. Voer periodieke controles uit
+
+Controleer regelmatig via:
+show spanning-tree interface detail
+show running-config | include portfast
+
+
+Hiermee verifieert u dat alle access-poorten correct geconfigureerd zijn.
+
+
+6. Informeer IT-medewerkers over veilig gebruik van PortFast
+
+Medewerkers die switches beheren moeten begrijpen:
+dat PortFast essentieel is voor hosts,
+maar nooit gebruikt mag worden op switch-to-switch verbindingen,
+hoe PortFast en BPDU-Guard samen werken.
+ 
+Dit voorkomt operationele risico’s en fouten.
+
+
+
+
+
+
+
+
+
+
+
+
