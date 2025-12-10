@@ -1,0 +1,244 @@
+Omschrijving
+
+
+Controleren of de wachtwoorden in een router of switch versleuteld zijn opgeslagen in de configuratie.
+
+Begrijpen hoe je dat kunt zien in de CLI.
+
+de wachtwoorden versleutelen als dat nog niet is gebeurd
+
+
+
+
+
+Uitvoering
+
+
+Hoe gebruik je de commando’s:
+
+Als eerst moet je de Enable commando doen,
+
+Daarna de show running-config,
+
+Niet-versleuteld:
+
+Line vty 0 4
+
+Password Cisco
+
+Wel versleuteld:
+
+Line vty 0 4
+
+Password 7 104D000A06234
+
+Of
+
+Password 5 $&Q%(#HIIiushfiu
+
+
+
+
+
+
+Verwachting
+
+je kunt het zien bij het inloggen op de switch en router. En bij de show running-config
+
+
+
+
+
+
+
+
+
+
+
+
+Impact
+
+Het niet-versleuteld opslaan van wachtwoorden op netwerkapparatuur brengt aanzienlijke beveiligings- en bedrijfsrisico’s met zich mee. Wanneer wachtwoorden in platte tekst zichtbaar zijn via de show running-config, kunnen onbevoegden deze eenvoudig lezen en misbruiken. Dit heeft de volgende impact:
+
+
+1. Onbevoegde toegang tot kritieke netwerkapparatuur
+
+Niet-versleutelde wachtwoorden (bijv. password Cisco) betekenen dat iedereen met toegang tot de CLI of configuratiebestanden direct volledige beheerrechten kan verkrijgen. Dit kan leiden tot:
+wijzigen of verwijderen van configuraties
+uitschakelen van interfaces of VLAN’s
+het manipuleren van routing of beveiligingsregels
+het volledig buiten werking stellen van switches en routers
+
+Hierdoor komt de integriteit en continuïteit van het gehele netwerk in gevaar.
+
+
+2. Verhoogd risico op datalekken en beveiligingsincidenten
+
+Wanneer wachtwoorden onversleuteld zijn opgeslagen, vormt dit een directe kwetsbaarheid tijdens:
+auditlogs
+configuratiebackups
+overdracht van configuraties naar collega’s
+exporteren van configs voor troubleshooting
+De kans dat wachtwoorden uitlekken — intern of extern — is daardoor aanzienlijk groter. Dit kan resulteren in:
+ongeautoriseerde toegang tot interne systemen
+manipulatie van netwerkverkeer
+interceptie van vertrouwelijke gegevens
+
+
+3. Non-compliance met beveiligingsstandaarden
+
+Veel normen vereisen dat wachtwoorden versleuteld worden opgeslagen, waaronder:
+ISO27001
+NEN7510
+CIS Controls
+BIO (voor overheid)
+interne beveiligingsrichtlijnen
+
+Het ontbreken van versleutelde wachtwoorden leidt tot non-compliance en verhoogt de kans op:
+negatieve auditbevindingen
+aanvullende beveiligingsmaatregelen
+financiële impact of sancties
+
+
+4. Verlies van accountability en forensische mogelijkheden
+
+Wanneer wachtwoorden ongecodeerd in configuraties staan, kunnen ze eenvoudig door medewerkers worden overgenomen of verspreid. Dit beïnvloedt de beheersbaarheid:
+lastig te achterhalen wie toegang heeft gehad
+lastig te achterhalen wie wijzigingen heeft doorgevoerd
+verhoogd risico op interne dreigingen
+
+
+5. Vergroot aanvalsoppervlak bij fysieke toegang
+
+Indien iemand fysieke toegang tot een switch of router verkrijgt, hoeft een aanvaller slechts één commando uit te voeren:
+
+
+show running-config
+
+
+Daarmee zijn direct alle wachtwoorden zichtbaar — zonder enige vorm van bescherming. Dit vergroot de impact van fysieke inbraak, diefstal of het onbevoegd openen van netwerkruimtes.
+
+
+
+
+
+
+
+Advies
+
+Om de beveiliging te verbeteren en wachtwoorden correct versleuteld op te slaan, adviseren wij de volgende maatregelen:
+
+
+1. Activeer altijd service password-encryption
+
+Dit commando zorgt dat alle line passwords en user-mode wachtwoorden worden versleuteld opgeslagen:
+
+
+service password-encryption
+
+
+Hiermee worden wachtwoorden weergegeven als typen zoals:
+
+
+7 104D000A06234
+
+
+Of:
+
+
+5 $8Q%<#HilIushfiu
+
+
+Hoewel dit geen onkraakbare encryptie is, voorkomt het directe blootstelling van wachtwoorden in platte tekst.
+
+
+2. Gebruik waar mogelijk enable secret in plaats van enable password
+
+enable secret maakt gebruik van sterke hashing (type 5 of hoger) en is de industriestandaard voor veilige opslag:
+
+
+enable secret <sterk_wachtwoord>
+
+
+Gebruik niet langer:
+
+
+enable password
+
+
+3. Implementatie van sterke wachtwoordvereisten
+
+Stel een wachtwoordbeleid op dat minimaal vereist:
+12–15 tekens
+hoofdletters, kleine letters, cijfers, speciale tekens
+geen hergebruik van wachtwoorden
+geen voorspelbare woorden zoals “Cisco” of “Admin”
+
+
+4. Gebruik individuele accounts voor beheerders
+
+Vermijd gedeelde wachtwoorden op VTY- en consolelijnen. Werken met individuele accounts voorkomt interne risico’s en bevordert traceerbaarheid.
+
+Bijvoorbeeld:
+
+
+username beheerder1 privilege 15 secret <wachtwoord>
+username beheerder2 privilege 15 secret <wachtwoord>
+
+line vty 0 4
+ login local
+
+
+5. Beperk toegang tot de running-config
+
+Zorg dat alleen geautoriseerde medewerkers toegang hebben tot:
+CLI
+configuratiebackups
+Netwerkmanagementsoftware
+
+Implementeer rolgebaseerde toegang waar mogelijk.
+
+
+6. Verbeter fysieke beveiliging van netwerkapparatuur
+
+Wachtwoordversleuteling gaat hand in hand met fysieke beveiliging. Advies:
+afsluitbare netwerk- en serverkasten
+toegangscontrole via badges of biometrie
+camerabewaking in netwerkruimtes
+logging van fysieke toegang
+
+
+7. Voer periodieke configuratie-audits uit
+
+Minimaal één keer per kwartaal:
+controleren op onversleutelde wachtwoorden
+nagaan of password-encryption actief is
+beoordelen of accounts nog actueel zijn
+Dit helpt beveiligingsincidenten vroegtijdig te detecteren.
+
+
+
+
+
+
+
+Samenvatting voor de klant
+
+Het versleuteld opslaan van wachtwoorden op routers en switches is cruciaal om te voorkomen dat onbevoegden toegang verkrijgen tot het netwerk. 
+Onversleutelde wachtwoorden vormen een direct beveiligingsrisico en leiden tot non-compliance met belangrijke normeringen. 
+Door het activeren van password-encryption, het gebruik van enable secret, sterke wachtwoordvereisten, individuele beheerdersaccounts en regelmatige audits wordt de beveiliging van het netwerk aanzienlijk verbeterd.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
