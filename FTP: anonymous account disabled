@@ -1,0 +1,116 @@
+Omschrijving
+
+Deze taak betekent dat we zorgen dat mensen zonder gebruikersnaam en wachtwoord geen toegang hebben tot de FTP-server
+
+
+
+Uitvoering
+
+Klik op de server in Packet Tracer.
+Ga naar het tabblad Services.
+Klik op FTP
+
+Kijk of het vakje **"Allow Anonymous"** is aangevinkt of niet.
+
+
+MAAK EEN FOTO VOOR HET EXAMEN <---------------
+
+
+
+Verwachting
+
+Als "Allow Anonymous" NIET is aangevinkt → Goed
+
+Als "Allow Anonymous" WEL is aangevinkt →  Fout
+
+
+
+
+
+Impact
+
+Wanneer de optie “Allow Anonymous” in de FTP-server is ingeschakeld, kunnen onbevoegde gebruikers zonder gebruikersnaam of wachtwoord toegang krijgen tot de FTP-dienst. Dit brengt diverse risico’s met zich mee:
+
+
+1. Ongeautoriseerde toegang tot bedrijfsbestanden
+
+Anonieme FTP-toegang maakt het mogelijk dat iedereen bestanden kan inzien, downloaden of – afhankelijk van de rechten – zelfs uploaden of verwijderen. Dit kan leiden tot datalekken, verlies van vertrouwelijke informatie of het ongewenst verspreiden van interne documenten.
+
+
+2. Verhoogde kans op misbruik door aanvallers
+
+Open FTP-toegang is een bekend doelwit voor geautomatiseerde aanvallen en scanners. Aanvallers kunnen de server gebruiken om:
+Malware te uploaden
+Illegale bestanden te hosten
+De FTP-server te misbruiken voor verdere aanvallen binnen het netwerk
+Dit kan direct leiden tot reputatieschade en mogelijk juridische gevolgen.
+
+
+3. Verstoring van bedrijfsprocessen
+
+Wanneer ongewenste of schadelijke bestanden worden geplaatst, kan dit leiden tot systeeminstabiliteit, verlies van data of verstoring van automatiseringsprocessen die afhankelijk zijn van FTP-verkeer.
+
+
+4. Compliance-problemen
+
+Veel organisaties vallen onder regelgeving zoals AVG, ISO-27001 of NIS2. Anonieme toegang tot interne systemen valt daar meestal buiten de toegestane normen en kan bij audits zorgen voor ernstige non-compliance bevindingen.
+
+
+
+
+
+
+
+
+
+Advies
+
+Om de veiligheid van de omgeving te verbeteren, bevelen wij de volgende maatregelen aan:
+
+
+1. Schakel “Allow Anonymous” uit
+
+De FTP-server moet uitsluitend toegankelijk zijn voor geauthenticeerde gebruikers met persoonlijke inloggegevens. Hiermee wordt gecontroleerd wie toegang heeft en welke acties die personen mogen uitvoeren.
+
+
+2. Werk met individuele gebruikersaccounts en gescheiden rechten
+
+Iedere gebruiker dient een eigen account te hebben, waarbij rechten worden toegekend volgens het least-privilege-principe:
+Alleen leesrechten indien nodig
+Schrijfrechten uitsluitend voor bevoegde rolhouders
+Verwijderrechten alleen voor beheerders
+Dit versterkt de accountability en beperkt schade bij misbruik.
+
+
+3. Overweeg het gebruik van SFTP in plaats van FTP
+
+FTP verstuurt gebruikersnamen en wachtwoorden in plain text, wat afluisteren mogelijk maakt. Indien mogelijk is het raadzaam over te stappen naar SFTP (SSH File Transfer Protocol) of FTPS, beide voorzien van encryptie.
+
+
+4. Implementeer logging en monitoring
+
+Schakel uitgebreide logbestanden in voor:
+Loginpogingen
+Bestandsuploads en -downloads
+Eventuele foutmeldingen
+Hierdoor kan verdachte activiteit sneller worden gedetecteerd.
+
+
+5. Beperk toegang via netwerksegmentatie
+
+Zorg dat de FTP-server alleen bereikbaar is vanuit de benodigde interne netwerken. Dit kan via:
+Access Control Lists (ACL’s)
+VLAN-segmentatie
+Firewalls
+Zo wordt ongewenst extern of breed intern verkeer geblokkeerd.
+
+
+6. Voer periodiek configuratie-audits uit
+
+Regelmatige controles voorkomen dat onbedoelde wijzigingen of verouderde instellingen leiden tot nieuwe kwetsbaarheden.
+
+
+
+
+
+
