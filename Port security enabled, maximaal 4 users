@@ -1,0 +1,183 @@
+Omschrijving
+
+Met port security zorg je ervoor dat er maar een bepaald aantal apparaten (MAC-adressen) tegelijk op een poort van een switch mag worden aangesloten. 
+In dit geval mogen er maximaal 4 apparaten per poort gebruikt worden. 
+Als er meer worden aangesloten, wordt de poort geblokkeerd of komt er een melding.
+
+
+
+
+Uitvoering 
+
+show port-security interface [interface-id]
+
+
+
+
+
+
+
+Impact
+
+Het configureren en actief monitoren van Port Security op netwerkapparatuur heeft een zeer positieve invloed op de veiligheid, stabiliteit en controleerbaarheid van het bedrijfsnetwerk. 
+Port Security biedt de mogelijkheid om het aantal toegestane apparaten per switchpoort te beperken en ongeautoriseerde netwerktoegang effectief te blokkeren.
+
+Belangrijkste aspecten van de impact:
+
+
+1. Verminderd risico op ongeautoriseerde toegang
+
+Port Security voorkomt dat onbekende of kwaadwillende apparaten verbinding maken met het netwerk via open poorten. Hierdoor kunnen externe gebruikers, leveranciers of onbevoegden niet zomaar het LAN binnendringen.
+
+
+2. Bescherming tegen MAC-spoofing
+
+MAC-spoofing wordt vaak gebruikt om beveiligingsmechanismen te omzeilen. Port Security detecteert afwijkende MAC-adressen en kan automatisch de poort blokkeren, waardoor potentiële aanvallen vroegtijdig worden gestopt.
+
+
+3. Voorkomt verspreiding van malware en ongewenste apparaten
+
+Door het aantal apparaten per poort te beperken, wordt voorkomen dat iemand ongewenste netwerkapparaten aansluit, zoals:
+WiFi-routers
+switches
+hubs
+IoT-apparaten
+
+Deze apparaten kunnen onbedoeld malware verspreiden of een veiligheidslek introduceren.
+
+
+4. Verbeterde netwerkstabiliteit
+
+Zonder Port Security is het mogelijk dat een gebruiker meerdere apparaten via een ongecontroleerde switch aansluit. Dit kan leiden tot:
+broadcast storms
+loops
+IP-conflicten
+onvoorspelbaar netwerkgedrag
+
+Met Port Security wordt dit risico aanzienlijk verlaagd.
+
+
+5. Snellere incidentrespons
+
+Bij een beveiligingsincident wordt snel duidelijk welke poort en welk MAC-adres betrokken is. Dit verkort de tijd tussen detectie en oplossing aanzienlijk, wat cruciaal is voor bedrijfscontinuïteit.
+
+
+6. Verhoogde traceerbaarheid en accountability
+
+Door het vastleggen van toegestane MAC-adressen is duidelijk wie of wat er op een poort is aangesloten. Dit verhoogt transparantie en verantwoordelijkheid binnen de organisatie.
+
+
+
+
+
+
+
+
+
+
+
+Advies
+
+Om de beveiliging verder te optimaliseren, adviseren wij de volgende best practices voor het gebruik van Port Security binnen uw organisatie:
+
+
+1. Stel een limiet op MAC-adressen per poort in
+
+Beperk het aantal apparaten per poort tot het strikt noodzakelijke, bijvoorbeeld:
+1 voor werkplekken
+2–4 voor gedeelde ruimtes
+
+Zorg ervoor dat toegang alleen wordt verleend aan geautoriseerde apparaten.
+
+
+switchport port-security maximum 4
+
+
+2. Gebruik ‘sticky MAC’ om toestellen automatisch te registreren
+
+Sticky MAC-adressen zorgen ervoor dat het MAC-adres van een aangesloten apparaat automatisch wordt opgeslagen. Dit voorkomt administratieve fouten en verhoogt efficiëntie.
+
+
+switchport port-security mac-address sticky
+
+
+3. Definieer een passende actie bij overtreding
+
+De aanbevolen functie is ‘restrict’ of ‘shutdown’.
+
+Voor kritieke netwerken (servers, beveiligingssystemen) raden wij aan:
+Errdisable (shutdown): volledig blokkeren bij overtreding
+Voor kantoorwerkplekken:
+Restrict: blokkeren + loggen zonder de poort langdurig buiten dienst te zetten
+
+Dit voorkomt onnodige verstoringen, maar meldt incidenten wél direct.
+
+
+4. Zorg voor centrale logging & monitoring
+
+Log alle Port Security-events naar:
+een syslog-server
+een monitoringdashboard
+een SIEM-platform
+
+Hierdoor worden verdachte activiteiten direct gesignaleerd en geanalyseerd.
+
+
+5. Documenteer alle toegewezen poorten
+
+Houd een centraal document bij waarin staat:
+welke apparaten via Port Security zijn toegestaan
+welke poorten sticky MAC gebruiken
+wanneer wijzigingen zijn doorgevoerd
+
+Dit vergemakkelijkt audits en beheer.
+
+
+6. Voer regelmatig controles uit
+
+Wij adviseren een kwartaal- of halfjaarlijkse audit, inclusief:
+controle op afwijkende MAC-adressen
+review van logging
+testen op juiste werking van restrict/shutdown
+validatie van configuraties
+
+
+7. Combineer Port Security met fysieke beveiliging
+
+Port Security voorkomt digitale toegang, maar fysieke toegang tot netwerkapparatuur moet óók worden beperkt.
+
+Denk hierbij aan:
+afgesloten patchkasten
+badge-toegang tot serverruimtes
+camera’s bij kritieke locaties
+
+8. Training voor IT-beheerders
+
+Zorg dat alle netwerkbeheerders bekend zijn met:
+het configureren van Port Security
+het interpreteren van incidentmeldingen
+het veilig activeren van poorten
+het oplossen van errdisabled-statussen
+
+Dit voorkomt dat Port Security zelf een bron van netwerkproblemen wordt.
+
+
+
+
+
+
+Samenvatting voor de klant
+
+Port Security vormt een belangrijke beveiligingslaag binnen uw netwerk en voorkomt dat ongeautoriseerde apparaten toegang krijgen tot bedrijfsgevoelige systemen en data. 
+Door Port Security correct in te stellen en te combineren met monitoring, documentatie en fysieke beveiligingsmaatregelen, wordt het risico op interne beveiligingsincidenten aanzienlijk verkleind. 
+Deze maatregel draagt bij aan een robuust, veilig en stabiel netwerk dat voldoet aan moderne veiligheidsnormen.
+
+
+
+
+
+
+
+
+
+
