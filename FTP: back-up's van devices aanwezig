@@ -1,0 +1,384 @@
+HELEMAAL ONDERRAAN STAAT JACQUES ZIJN GEPLAKTE TEKST <----------------------------
+
+
+Omschrijving
+
+In deze taak controleer je of de FTP-back-upfunctie correct werkt. De switches (SW1, SW2 en SW3) zouden automatisch back-ups van hun configuratie moeten opslaan op een centrale FTP-server.
+
+Met deze stappen kun je:
+
+Controleren of de back-upbestanden echt op de FTP-server staan, en
+
+De bestanden zelf downloaden en openen, zodat je kunt bevestigen dat de running-config daadwerkelijk is opgeslagen.
+
+Dit zorgt ervoor dat back-ups beschikbaar zijn bij storingen of herstelacties.
+
+
+
+
+
+
+Uitvoering
+1. Controleren of de back-upbestanden op de FTP-server staan
+Bestanden bekijken via de serverinterface
+
+Klik op het Server-device in Packet Tracer.
+
+Ga naar het tabblad Services.
+
+Klik links op FTP.
+
+In het grote venster verschijnt een lijst met alle bestanden die op de FTP-server staan.
+
+Controleer of er back-ups aanwezig zijn, zoals:
+
+SW1-config.cfg
+
+SW2-backup.cfg
+
+SW3-config-2025-12-10.cfg
+
+Als deze bestanden aanwezig zijn, worden de back-ups succesvol opgeslagen.
+
+
+
+2. De back-upbestanden downloaden en openen
+Stap 1: Download het configuratiebestand via FTP
+
+Open op een PC in Packet Tracer de Command Prompt (Desktop → Command Prompt).
+Start een FTP-sessie:
+
+
+ftp <IP-adres FTP-server>
+
+
+Log in met de gebruikersnaam en wachtwoord (te vinden via:
+Server → Services → FTP).
+
+Toon de lijst met bestanden:
+
+
+dir
+
+
+Download het gewenste configuratiebestand, bijvoorbeeld:
+
+
+get SW3-config-2025-12-10.cfg
+
+
+Sluit de sessie:
+
+bye
+
+
+Stap 2: Configuratiebestand openen
+
+Ga op de PC naar het tabblad Desktop.
+
+Open Text Editor.
+
+Klik op File → Open.
+
+Selecteer het gedownloade bestand.
+
+Nu kun je de volledige inhoud van de running-config bekijken, zoals interfaces, wachtwoorden (versleuteld), VLAN’s, logging-instellingen, enzovoort.
+
+
+
+Verwachting
+
+Na het uitvoeren van deze stappen verwacht je het volgende:
+
+1. Op de FTP-server
+
+De back-upbestanden van SW1, SW2 en SW3 zijn zichtbaar in de FTP-bestandenlijst.
+
+De bestandsnamen komen overeen met de geconfigureerde switches.
+
+De tijd en datum van de bestanden passen bij het moment waarop de back-up is gemaakt.
+
+2. Tijdens de FTP-download
+
+Je kunt succesvol inloggen op de FTP-server.
+
+Het dir-commando toont dezelfde bestanden die je in de serverinterface zag.
+
+Het get-commando downloadt het back-upbestand zonder foutmeldingen.
+
+3. In de Text Editor
+
+Het geopende configuratiebestand bevat de volledige running-config van de switch, inclusief:
+
+interface-instellingen
+
+wachtwoorden (versleuteld)
+
+VLAN-configuratie
+
+logging-instellingen
+
+hostname van de switch
+
+Hiermee bevestig je dat de back-up volledig en bruikbaar is.
+
+
+
+
+
+
+
+
+
+
+
+
+Impact
+
+Wanneer de FTP-back-upfunctionaliteit niet goed werkt, niet is geconfigureerd, of wanneer back-upbestanden niet correct worden geüpload naar de server, heeft dit belangrijke gevolgen voor de continuïteit en het beheer van het netwerk.
+
+
+1. Verlies van configuraties bij storing of herstart
+
+Als er geen recente configuratieback-ups zijn, kunnen de switches na een:
+stroomuitval
+defect
+mislukte update
+verkeerde configuratiewijziging
+niet eenvoudig worden hersteld.
+
+Dit betekent dat het netwerk langdurig offline kan zijn totdat een engineer de volledige configuratie handmatig reconstrueert.
+
+2. Langdurige downtime en hogere herstelkosten
+
+Zonder back-up:
+moeten engineers interface per interface opnieuw configureren,
+duurt het herstelproces veel langer,
+neemt de kans op fouten sterk toe.
+
+Dit kan leiden tot:
+verstoring van bedrijfsprocessen,
+communicatieproblemen tussen afdelingen,
+
+verlies van productiviteit.
+
+
+3. Onvolledige of inconsistente configuraties
+
+Als sommige back-ups wel aanwezig zijn en andere ontbreken, kan het gebeuren dat:
+SW1 een recente config heeft
+maar SW2 een oude of ontbrekende back-up
+of SW3 helemaal niet voorkomt op de FTP-server
+
+Dit leidt tot inconsistente netwerkinstellingen na een herstel, wat weer nieuwe problemen veroorzaakt.
+
+
+4. Beperkte mogelijkheid tot troubleshooting
+
+De running-config is niet alleen nodig voor herstel, maar ook voor:
+security-audits
+foutopsporing
+analyse van configuratiewijzigingen
+
+Zonder back-ups ontbreken historische configuraties, wat het onmogelijk maakt om terug te kijken welke wijzigingen zijn gedaan en wanneer.
+
+
+5. Beveiligingsrisico’s
+
+Wanneer er geen back-ups bestaan:
+bestaan er geen referentieconfiguraties,
+is het lastiger ongeautoriseerde configuratiewijzigingen te detecteren,
+
+ontstaan risico’s dat beveiligingsinstellingen onopgemerkt veranderen.
+
+
+
+Samenvattend effect
+
+Het ontbreken van een juiste back-upoplossing verlaagt de betrouwbaarheid van de netwerkomgeving aanzienlijk en verhoogt zowel operationele als financiële risico’s. Een back-upstrategie is essentieel voor stabiliteit, beveiliging en bedrijfscontinuïteit.
+
+
+
+
+
+
+
+
+
+
+
+
+
+Advies
+
+Op basis van de bevindingen adviseren wij de volgende best practices om de betrouwbaarheid van de FTP-back-ups en de algemene configuratiebeveiliging te waarborgen.
+
+
+1. Implementeer automatische configuratieback-ups
+
+Zorg ervoor dat elke switch (SW1, SW2, SW3) automatisch een back-up maakt van zijn running-config naar de FTP-server.
+Dit kan handmatig of geautomatiseerd via:
+
+copy running-config ftp:
+of via periodieke scripts/opdrachten.
+
+Automatisering minimaliseert menselijke fouten.
+
+
+2. Controleer regelmatig de FTP-server op back-upbestanden
+
+Wij adviseren om wekelijks of maandelijks te controleren:
+of alle configuratiebestanden aanwezig zijn,
+of de tijdstempel overeenkomt met recente back-ups,
+of bestandsnamen logisch en herkenbaar zijn.
+
+Gebruik hiervoor zowel de FTP-sectie in Server → Services → FTP als de FTP-client vanaf een PC.
+
+
+3. Test de back-ups door ze te downloaden en te openen
+
+Een back-up is pas bruikbaar als deze:
+volledig is,
+leesbaar is,
+en overeenkomt met de daadwerkelijke switchconfiguratie.
+
+Download regelmatig één van de back-ups en open deze in de Text Editor om de integriteit te controleren.
+
+
+4. Documenteer de inloggegevens van de FTP-server
+
+Zorg dat gebruikersnaam en wachtwoord van de FTP-service:
+veilig worden opgeslagen,
+gedocumenteerd zijn voor beheerders,
+
+en regelmatig worden gecontroleerd of ze nog functioneren.
+
+De locatie om de credentials terug te vinden in Packet Tracer:
+Server → Services → FTP
+
+
+5. Combineer FTP-back-ups met NTP en Syslog
+
+Voor een professionele backup- en loggingstrategie adviseren wij:
+
+NTP: juiste tijdstempels voor bestanden
+
+Syslog: meldingen van configuratiewijzigingen en back-ups
+
+FTP: centrale opslag van configuraties
+
+Deze combinatie zorgt voor een robuust audit- en herstelproces.
+
+
+6. Implementeer een vaste standaardnaamgeving
+
+Gebruik bijvoorbeeld:
+
+
+SW1-backup-YYYY-MM-DD.cfg
+
+
+Dit maakt het makkelijk om te zien:
+
+wanneer een back-up is gemaakt
+
+van welk apparaat het bestand afkomstig is
+
+welke back-up de meest recente is
+
+
+7. Bewaar meerdere historische versies
+
+Een enkele back-up is niet genoeg.
+Bewaar meerdere versies, zodat bij fouten in de huidige configuratie altijd een oudere, wél werkende versie beschikbaar is.
+
+
+8. Bescherm de FTP-server
+
+Omdat de configuratiebestanden gevoelige informatie bevatten (zoals gebruikers, keys en netwerkopbouw), adviseren wij:
+beveiligde toegang tot de server,
+aparte gebruikersaccounts voor back-ups,
+beperking van toegang tot alleen beheerders.
+
+
+
+
+Conclusie
+
+Een goed ingerichte FTP-back-upstructuur is cruciaal om netwerkstabiliteit en bedrijfscontinuïteit te waarborgen.
+Met de hierboven beschreven maatregelen worden risico’s sterk verminderd en is de organisatie veel beter voorbereid op storingen, menselijke fouten of configuratiewijzigingen.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Als de FTP-server is geïmplementeerd met de standaard Server-device in Packet Tracer, kun je de files direct via de grafische interface bekijken.
+
+Klik op de Server: Klik op het Server-device in je topologie.
+
+Ga naar 'Services': Selecteer het tabblad 'Services'.
+
+Kies 'FTP': Klik in de linkerkolom op de 'FTP'-service.
+
+Bekijk de Bestandenlijst: Je ziet een lijst van alle bestanden die de server heeft opgeslagen. Controleer de lijst op de configuratiebestanden van SW1, SW2 en SW3.
+dit is om erachter te komen of er ook echt backups worden toegevoegd aan je ftp server van je running config
+en dit is om ze ook echt in te zien
+
+
+
+
+
+
+
+Stap 1: Download het Configuratiebestand
+Je gebruikt de FTP-sessie vanaf de PC om het bestand van de server naar de lokale PC te kopiëren.
+
+Open de Command Prompt op de PC.
+
+Start de FTP-sessie:
+
+Bash
+
+C:> ftp <IP-adres van de FTP-server>
+ftp> login met gebruikersnaam/wachtwoord
+Zoek het bestand: Gebruik dir om de exacte naam van het back-upbestand te vinden (bijv. SW3-config-2025-12-10.cfg).
+
+Downloaden: Gebruik het get commando om het bestand naar de lokale PC te kopiëren.
+
+Bash
+
+ftp> get SW3-config-2025-12-10.cfg
+Sluit de sessie:
+
+Bash
+
+ftp> bye
+Stap 2: Open de lokale kopie met de Text Editor
+Nadat het bestand lokaal is opgeslagen, kun je de inhoud bekijken.
+
+Ga terug naar het 'Desktop' tabblad van de PC.
+
+Klik op de applicatie 'Text Editor'.
+
+Klik op 'File' en dan 'Open'.
+
+Zoek en selecteer het bestand dat je zojuist hebt gedownload (bijv. SW3-config-2025-12-10.cfg).
+
+Het bestand wordt geopend. Je ziet nu de volledige tekst van de running-config van die switch, inclusief alle interfaces, VTY-lijnen, wachtwoorden (versleuteld), en de logging host configuratie!
+
+
+
+
+  
+OM DE LOGIN TEVINDEN OM DE FTP IN TE KOMEN VIA DE LAPTOP MOET JE NAAR: FTP SERVER, SERVICES, FTP GAAN 
