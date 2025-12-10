@@ -1,0 +1,35 @@
+btw
+for the ios version check
+u have in github show version
+which is correct
+
+
+24 FastEthernet/IEEE 802.3 interface(s)
+2 Gigabit Ethernet/IEEE 802.3 interface(s)
+
+63488K bytes of flash-simulated non-volatile configuration memory.
+Base ethernet MAC Address       : 0060.47BB.9C2D
+Motherboard assembly number     : 73-9832-06
+Power supply part number        : 341-0097-02
+Motherboard serial number       : FOC103248MJ
+Power supply serial number      : DCA102133JA
+Model revision number           : B0
+Motherboard revision number     : C0
+Model number                    : WS-C2960-24TT
+System serial number            : FOC103321EY
+Top Assembly Part Number        : 800-26671-02
+Top Assembly Revision Number    : B0
+Version ID                      : V02
+CLEI Code Number                : COM3K00BRA
+Hardware Board Revision Number  : 0x01
+
+Switch   Ports   Model             SW Version   SW Image
+------   -----   -----             ----------   --------
+*        1       26   WS-C2960-24TT   12.2      C2960-LANBASE-M
+                                        ^
+                                        |
+                                        |
+                                        |
+but this is what u get
+its the one below sw version
+but if you just do show running config its literally the first line that u see
