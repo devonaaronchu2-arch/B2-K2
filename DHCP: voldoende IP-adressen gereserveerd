@@ -1,0 +1,173 @@
+Omschrijving
+
+Kijk in de DHCP-server of er genoeg IP-adressen beschikbaar zijn
+
+
+
+Uitvoering
+
+Ga naar de DHCP-Server druk vervolgens op Services in de bovenste balk, druk vervolgens op DHCP in de balk links.
+
+
+
+Verwachting
+
+Je gaat naar je server of apparaat wat dan ook (voorbeeld is server)
+Je gaat naar services en dan naar DHCP.
+
+Waar MAXIMUM NUMBER OF USERS STAAT <-------------- moet je omcirkelen 
+
+
+
+
+
+
+
+
+
+
+Impact
+
+Wanneer er onvoldoende IP-adressen beschikbaar zijn in de DHCP-scope, kunnen meerdere kritieke netwerk- en bedrijfsproblemen ontstaan. Deze problemen kunnen directe invloed hebben op de bereikbaarheid, productiviteit en stabiliteit van het netwerk.
+
+
+
+1. Apparaten kunnen geen IP-adres meer verkrijgen
+
+Als de DHCP-pool vol is, kunnen nieuwe of herstartende apparaten geen IP-adres krijgen.
+
+Gevolgen:
+Geen netwerktoegang voor werkstations, laptops, printers, IoT-apparaten of VoIP-telefoons.
+Medewerkers kunnen niet inloggen, geen verbinding maken met applicaties of servers.
+Kritieke diensten zoals toegangscontrole-, camera- of telefoniesystemen kunnen uitvallen.
+
+
+2. Verlies van bedrijfscontinuïteit
+
+Zonder een werkende DHCP-server kan een groot deel van het netwerk stilvallen.
+
+Mogelijke impact op bedrijfsvoering:
+Werkprocessen komen tot stilstand.
+Klantondersteuning, logistieke systemen of planningstools worden onbereikbaar.
+Vertraging in werkzaamheden, financiële schade, verhoogde werkdruk op IT-afdeling.
+
+
+3. Onvoorspelbaar netwerkgedrag
+
+Apparaten die geen IP-adres krijgen, proberen soms automatisch:
+Zelf een APIPA-adres (169.254.x.x) te configureren
+Statisch een eerder gebruikte configuratie te behouden
+Continu DHCP-verzoeken te herhalen (extra broadcast-verkeer)
+
+Gevolg: onnodige belasting van het netwerk en slechtere prestaties.
+
+
+4. Toename van incidenten en helpdeskverzoeken
+
+Wanneer gebruikers geen netwerkverbinding meer hebben:
+Worden er veel supporttickets aangemaakt
+Moet IT handmatig interventies uitvoeren
+Duurt probleemoplossing langer bij grote DHCP-scopes
+
+
+5. Risico op verkeerde tijdelijke oplossingen
+
+Bij uitval van DHCP worden soms ad-hoc oplossingen gebruikt:
+Handmatig statische IP-adressen uitdelen
+Oude lease-tijden verkorten zonder overzicht
+Extra DHCP-servers laten draaien (gevaar voor DUAL DHCP-conflicts)
+
+Risico: verdere verstoring van het netwerk en extra beveiligingsproblemen.
+
+
+
+
+
+
+
+Advies
+
+Om te voorkomen dat er IP-tekorten ontstaan of dat kritieke diensten uitvallen, adviseren wij de volgende maatregelen. Deze zijn gebaseerd op best practices voor bedrijfsnetwerken.
+
+
+1. Vergroot de DHCP-scope als er structureel tekort dreigt
+
+Indien het subnet dit toelaat:
+Verhoog het maximale aantal beschikbare adressen
+Herzie de subnetmaskerconfiguratie indien het netwerk groeit
+Verwijder ongebruikte reserveringen
+
+Voordeel: directe oplossing bij groeiende netwerkomgevingen.
+
+
+2. Analyseer DHCP-leasegebruik
+
+Controleer:
+Hoeveel adressen zijn daadwerkelijk in gebruik?
+Hoeveel leases zijn verlopen maar nog niet vrijgegeven?
+Is het verkeer seizoensgebonden (bijv. veel stagiaires, tijdelijke werknemers)?
+Dit geeft inzicht in toekomstige capaciteit.
+
+
+3. Pas de lease-tijd aan
+
+Een te lange lease-tijd bezet adressen onnodig.
+Een te korte lease-tijd veroorzaakt meer verkeer.
+
+Aanbevolen:
+Werkplekken: 8–24 uur
+Mobiele apparaten: 2–8 uur
+Servers/printers: static of reservering
+Pas dit aan op basis van het gebruikspatroon.
+
+
+4. Gebruik reserveringen voor vaste apparatuur
+
+Voor printers, servers, camera’s, toegangscontrole en telefonie is het verstandig om:
+Statische DHCP-reserveringen te configureren
+Onnodige dynamische leases vrij te maken
+
+Voordeel: minder verbruik van dynamische IP-adressen.
+
+
+5. Plan subnetuitbreiding indien nodig
+
+Wanneer de organisatie groeit en verschillende afdelingen meer apparaten krijgen, kan het subnet te klein worden.
+
+Advies:
+Segmenteer het netwerk in meerdere VLAN’s
+Richt voldoende grote scopes in per afdeling
+Voorkom dat één scope alle apparaten moet bedienen
+Dit verbetert zowel schaalbaarheid als prestaties.
+
+
+6. Implementeer monitoring op DHCP
+
+Gebruik DHCP-logging of monitoringtools om:
+Scope-uitputting vroegtijdig te detecteren
+Trends in gebruik te analyseren
+Automatische waarschuwingen te krijgen wanneer pool <20%
+Zo kan actie worden ondernomen vóórdat er problemen ontstaan.
+
+7. Documenteer alle DHCP-instellingen
+
+Zorg dat duidelijk is:
+Hoe groot elke scope is
+Welke reserveringen bestaan
+Wat de lease-tijden zijn
+Welke gateways/DNS-servers worden gebruikt
+Dit versnelt troubleshooting en voorkomt configuratiefouten.
+
+
+
+
+
+Samenvatting voor de klant
+
+Er is gecontroleerd of de DHCP-server voldoende vrije IP-adressen beschikbaar heeft. 
+Een tekort aan DHCP-adressen kan leiden tot netwerkuitval, gebruikers die geen verbinding kunnen maken en verstoringen van bedrijfsprocessen. 
+Om dit te voorkomen adviseren wij om de DHCP-scope regelmatig te controleren, de lease-instellingen te optimaliseren, reserveringen correct in te richten, en waar nodig de scope/subnet te vergroten om toekomstige groei op te vangen.
+
+
+
+
