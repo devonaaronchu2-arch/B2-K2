@@ -1,0 +1,172 @@
+Omschrijving
+
+Deze beheertaak is het controleren/checken of default passive interface enabled is 
+
+
+
+Uitvoering
+
+(rekening houden met dat je nog niet in de router config mode zit)
+
+- Enable
+- Conf t
+- show running-config
+
+Ga door naar beneden (enter) totdat je router ospf 1 (1 is een voorbeeld, hier zou je je OSPF ID neerzetten)
+
+
+
+
+Verwachting
+
+Er zou onder het tab passive-interface default moeten staan. Zo niet dan staan die niet op default.
+
+interface FastEthernet0/1
+  ip address 192.168.1.1 255.255.255.0
+  duplex auto
+  speed auto
+!
+Interface Vlan1
+  no ip address
+  shutdown
+!
+Router ospf1
+  Log adjacency-changes  
+  passive-interface default  <-------------------- hier dit moet je dan omcirkelen volgens de wiki 
+!
+ip classless
+!
+ip flow-export version 9
+
+
+
+
+
+
+Impact
+
+Wanneer “passive-interface default” niet is geconfigureerd in OSPF, heeft dit meerdere potentiële gevolgen voor zowel de veiligheid als de prestaties van het netwerk.
+
+
+1. Onnodige OSPF-advertenties op alle interfaces
+
+Zonder “passive-interface default” probeert de router OSPF-hello’s te sturen op alle actieve interfaces, tenzij specifiek anders ingesteld. Dit betekent dat:
+Interfaces die naar eindgebruikers, printers of andere niet-routerende apparaten gaan toch OSPF-hello’s versturen.
+Onnodig CPU- en bandbreedtegebruik kan ontstaan.
+Er potentieel OSPF-pakketten terechtkomen op plekken waar dit niet hoort.
+
+Gevolg: inefficiënt routerverkeer en verhoogde kans op misconfiguraties.
+
+
+2. Beveiligingsrisico: ongewenste OSPF-neighbors
+
+Als een interface niet passief is, kan in theorie elk apparaat dat op die interface wordt aangesloten proberen OSPF-neighbor te worden.
+
+Risico’s:
+Een onbevoegd apparaat kan OSPF-routes beïnvloeden (route injection).
+Een aanvaller kan proberen de routing table te manipuleren of verkeer om te leiden (man-in-the-middle).
+Onbedoelde of rogue routers kunnen de netwerkstabiliteit verstoren.
+Dit vormt een serieus beveiligingsrisico, omdat OSPF normaal gesproken vertrouwt op de integriteit van buren.
+
+
+3. Verhoogde kans op netwerkstoringen
+
+Zonder passieve interfaces kan een per ongeluk aangesloten apparaat of misconfiguratie leiden tot:
+Router-flapping
+OSPF-reconvergence
+Tijdelijke of langdurige netwerkonderbrekingen
+Onvoorspelbaar verkeer tussen VLAN’s
+
+
+4. Schending van best practices en auditrichtlijnen
+
+In professionele netwerken wordt verwacht dat routing-protocollen alleen actief worden gebruikt op interfaces waar dat noodzakelijk is.
+Zonder “passive-interface default”:
+Wordt het netwerk lastiger te auditen.
+Staat het netwerk open voor configuratiefouten.
+Kunnen internos of externe auditors dit als “onveilige configuratie” markeren.
+
+
+
+
+
+
+
+
+
+
+
+Advies
+
+Op basis van de geconstateerde configuratie adviseren wij de volgende verbeteringen om de betrouwbaarheid, veiligheid en efficiëntie van het netwerk te vergroten.
+
+
+1. Schakel “passive-interface default” in
+
+Dit is de aanbevolen configuratie in vrijwel elk modern bedrijfsnetwerk.
+Hierdoor worden alle interfaces standaard passief, wat betekent:
+Ze versturen géén OSPF-hello’s
+Ze accepteren géén OSPF-neighbors
+Ze adverteren nog wél hun netwerk in OSPF (dit is gewenst voor interne routing)
+
+Voordeel:
+Alleen de interfaces die je expliciet nodig hebt voor router-naar-router-communicatie worden actief.
+
+
+2. Activeer alleen de noodzakelijke interfaces voor OSPF
+
+Gebruik bijvoorbeeld:
+
+router ospf 1
+ passive-interface default
+ no passive-interface GigabitEthernet0/1
+ no passive-interface GigabitEthernet0/2
+
+
+Hierdoor is OSPF uitsluitend actief op uplinks naar andere routers.
+
+
+3. Verhoog beveiliging van routing-protocol
+
+Mocht het netwerk groter worden of buiten je eigen beheerde domein reiken, implementeer dan aanvullende beveiliging zoals:
+
+OSPF-authentication (MD5)
+Hiermee voorkom je dat ongeautoriseerde apparaten OSPF-buren kunnen worden.
+
+Interface-level filtering
+Bijvoorbeeld via ACL’s of port security.
+
+
+4. Documenteer welke interfaces actief OSPF moeten draaien
+
+Dit voorkomt fouten bij toekomstige uitbreidingen of onderhoud.
+Documentatie zou moeten bevatten:
+Welke routerinterfaces OSPF gebruiken
+Welke interfaces passief moeten zijn
+Welke netwerken geadverteerd worden
+Redenatie achter elke keuze
+
+
+5. Voer periodieke controles uit
+
+Wij adviseren om:
+Minimaal 1x per kwartaal
+Of bij elke wijziging in het netwerk
+een review uit te voeren op routing-configuraties zoals OSPF.
+Zo zorg je dat passieve interfaces nog steeds correct staan ingesteld en dat er geen onbedoelde wijzigingen zijn aangebracht.
+
+
+
+
+Samenvatting voor de klant
+
+Tijdens de controle is vastgesteld dat de instelling “passive-interface default” niet aanwezig of niet correct is ingesteld.
+Hierdoor verstuurt de router OSPF-hello’s op alle actieve interfaces, inclusief interfaces die alleen bedoeld zijn voor eindapparatuur. 
+Dit brengt veiligheidsrisico’s met zich mee en kan leiden tot inefficiënte routering of netwerkstoringen.
+
+Wij adviseren om “passive-interface default” te activeren en uitsluitend de noodzakelijke router-naar-routerinterfaces vrij te geven. Dit verhoogt de beveiliging, prestaties en stabiliteit van uw netwerk significant.
+
+
+
+
+
