@@ -1,0 +1,224 @@
+Omschrijving
+
+In deze beheertaak ga ik controleren of er een wachtwoord is ingesteld op de consolepoort van een netwerkapparaat. Dit doe ik met het commando show running-config. Ik controleer of zowel het password-commando als het login-commando aanwezig zijn onder de configuratie van line console 0. Als het wachtwoord ontbreekt, geef ik advies om dit alsnog correct in te stellen voor een veilige toegang tot het apparaat. 
+
+
+
+
+Uitvoering
+
+Enable 
+Show running-config 
+
+
+
+Verwachting
+
+ Er is alleen een login wachtwoord is nog niet ingesteld
+
+line aux 0
+!
+line vty 0 4
+  login
+!
+!
+!
+!
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Impact
+
+Het ontbreken van een correct ingesteld console-wachtwoord heeft directe en ernstige gevolgen voor de beveiliging van het netwerk. 
+De consolepoort is één van de meest kritieke beheerinterfaces van een router of switch omdat deze fysieke en ongefilterde toegang biedt tot het apparaat. 
+Zelfs wanneer netwerktoegang beveiligd is (via SSH, ACL’s of firewalls), geeft de consolepoort volledige toegang tot het systeem zodra iemand fysiek bij het apparaat kan.
+
+Belangrijkste beveiligingsrisico’s:
+
+
+1. Onbeveiligde fysieke toegang leidt tot volledige controle
+
+Zonder een console-wachtwoord kan iedereen met fysieke toegang tot het apparaat direct inloggen, zelfs in de user EXEC-mode, en vaak eenvoudig escaleren naar privileged EXEC (enable).
+
+Dit betekent dat een aanvaller:
+configuraties kan wijzigen of wissen
+wachtwoorden kan resetten of verwijderen
+VLAN’s kan herconfigureren
+het apparaat volledig onbruikbaar kan maken (DoS-aanval)
+
+Dit vormt een groot risico voor de bedrijfscontinuïteit.
+
+
+2. Gevoelige informatie kan worden ingezien
+
+In de running-config bevinden zich vaak gevoelige gegevens, zoals:
+wachtwoord-hashes
+VLAN- en routingconfiguraties
+management-IP’s
+
+Zonder consolebeveiliging kan dit eenvoudig worden uitgelezen.
+
+
+3. Mogelijkheid tot inside threats
+
+Niet alleen externe aanvallers vormen een risico. In veel organisaties kunnen o.a.:
+schoonmakers
+leveranciers
+stagiairs
+medewerkers zonder IT-rol
+
+langskomen in ruimtes waar netwerkapparatuur staat.
+Een onbeveiligde consolepoort maakt het voor een kwaadwillende bijna triviaal om het netwerk te saboteren.
+
+
+4. Verlies van compliance
+
+Veel organisaties vallen onder beveiligingsstandaarden zoals:
+ISO27001
+NEN7510
+CIS Controls
+Baseline Informatiebeveiliging Overheid (BIO)
+
+Deze vereisen dat alle beheerinterfaces adequaat zijn beschermd.
+Een ongeconfigureerd console-wachtwoord betekent dus directe non-compliance.
+
+
+5. Impact op bedrijfscontinuïteit
+
+Een onbeveiligde console verhoogt de kans op:
+uitval van netwerkapparatuur
+ongeautoriseerde wijzigingen
+downtime
+data-inbreuk
+
+Wat kan resulteren in productiviteitsverlies, reputatieschade en herstelkosten.
+
+
+
+
+
+
+
+
+
+
+
+Advies
+
+Om de veiligheid van het netwerk aanzienlijk te verbeteren, adviseren wij de volgende maatregelen te implementeren:
+
+
+1. Configureer direct een sterk console-wachtwoord
+
+Stel op de consolepoort een wachtwoord in dat voldoet aan de bedrijfsbrede wachtwoordnormen (min. 10–12 tekens, sterk en uniek).
+
+Cisco-configuratievoorbeeld:
+
+
+line console 0
+ password <sterk_wachtwoord>
+ login
+
+
+Dit voorkomt dat onbevoegden überhaupt toegang krijgen tot user EXEC-modus.
+
+
+2. Activeer ‘login local’ voor extra beveiliging
+
+In plaats van één console-wachtwoord is het veel veiliger om in te loggen met individuele gebruikersaccounts.
+
+
+line console 0
+ login local
+
+
+
+Dit verhoogt traceerbaarheid en accountability.
+
+
+3. Zorg voor sterke enable secret
+
+Zelfs met console-beveiliging moet ook de privileged mode beveiligd zijn.
+
+
+enable secret <sterk_wachtwoord>
+
+
+
+Gebruik nooit meer enable password, alleen enable secret (versleuteld).
+
+
+4. Gebruik service password-encryption
+
+Dit zorgt ervoor dat wachtwoorden niet in plain text zichtbaar zijn in de running-config.
+
+
+service password-encryption
+
+
+5. Beperk fysieke toegang tot netwerkapparatuur
+
+Consolebeveiliging is nutteloos als iedereen fysiek bij het apparaat kan.
+
+Wij adviseren:
+afsluitbare server- en patchkasten
+badge-toegang tot IT-ruimtes
+camerabewaking in netwerkruimtes
+toegangsregistratie
+
+
+6. Documenteer alle wachtwoorden en beheeraccounts beveiligd
+
+Gebruik hiervoor:
+een wachtwoordkluis (bijv. Bitwarden, LastPass Enterprise)
+MFA voor beheerdersaccounts
+een wachtwoordrotatiebeleid
+
+
+7. Train interne medewerkers
+
+Alle IT-beheerders moeten op de hoogte zijn van:
+consolebeveiliging
+enable secret policies
+veilig wachtwoordbeheer
+wijzigingsprocedures (change management)
+
+
+8. Controleer periodiek de beveiliging van alle consolepoorten
+
+Wij raden minstens één keer per kwartaal een audit aan:
+check running-config
+controleer password-hashes
+valideer logins
+test of ongewenste toegang wordt geweigerd
+
+
+
+
+
+
+Samenvatting voor de klant
+
+Het instellen van een console-wachtwoord is essentieel om onbevoegde toegang te voorkomen en de veiligheid, stabiliteit en integriteit van het netwerk te waarborgen. 
+Zonder deze beveiliging loopt de organisatie een aanzienlijk risico op misbruik, sabotage en datalekken. 
+Door een sterk wachtwoord, gebruikersauthenticatie, enable secret en een strikt toegangsbeleid te implementeren, wordt dit risico effectief geminimaliseerd en voldoet het netwerk aan moderne beveiligingsnormen.
+
+
+
+
+
+
