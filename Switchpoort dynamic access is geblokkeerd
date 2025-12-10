@@ -1,0 +1,156 @@
+Omschrijving
+
+Betekent eigenlijk dat een poort automatisch een VLAN krijgt toegewezen zodra een apparaat wordt aangesloten. 
+
+
+
+Uitvoering
+
+Show interface status
+Show interface <interface-id> switchport
+
+
+
+Verwachting
+
+Je kijkt naar de **Status** van de poort, of deze op “connected” staat, en of mode op “dynamic” of “dynamic auto/desirable” staat.  (Bij dit voorbeeld zouden de ongebruikte ports gewoon uitgeschakeld moeten staan zodat niemand toegang kan krijgen)
+
+
+FOTO OP HET EXAMEN NEERZETTEN GANG
+
+
+Impact
+
+Wanneer switchpoorten automatisch een VLAN toegewezen krijgen of in een onbeveiligde modus staan (zoals dynamic auto of dynamic desirable), heeft dit een directe invloed op de veiligheid en stabiliteit van het netwerk. De belangrijkste risico’s zijn:
+
+
+1. Ongeautoriseerde netwerktoegang via ongebruikte poorten
+
+Indien ongebruikte poorten niet zijn uitgeschakeld, kan ieder fysiek apparaat dat wordt aangesloten automatisch verbinding krijgen met het netwerk. Hierdoor kunnen onbevoegden:
+toegang krijgen tot interne systemen,
+verkeer afluisteren,
+malware verspreiden,
+deel worden van het LAN zonder enige authenticatie.
+Dit vormt een van de meest voorkomende fysieke netwerklekken.
+
+
+2. Automatische VLAN-toewijzing kan leiden tot verkeerd geplaatste apparaten
+
+Wanneer poorten in dynamic DTP-modus staan, kunnen ze automatisch trunk worden of in een ander VLAN terechtkomen. Dit kan resulteren in:
+apparaten die toegang krijgen tot verkeerde netwerksegmenten,
+schending van netwerksegmentatie,
+hogere kans op laterale beweging bij aanvallen.
+Segmentatie is een cruciale beveiligingsmaatregel, en deze wordt ondermijnd wanneer poorten zichzelf configureren.
+
+
+3. Kans op VLAN-hopping-aanvallen
+
+Bij poorten die op dynamic desirable of auto staan, bestaat een verhoogd risico op VLAN-hopping, waarbij een aanvaller:
+zelf trunking initieert,
+verkeer van andere VLAN’s onderschept,
+netwerkgrenzen omzeilt.
+Dit is een bekende aanvalsvector binnen zwak beveiligde switching-omgevingen.
+
+
+4. Verhoogde kans op configuratiefouten
+
+Wanneer meerdere poorten automatisch VLAN- of DTP-instellingen bepalen, ontstaat het risico dat:
+configuraties inconsistent worden,
+troubleshooting complexer wordt,
+netwerkgedrag onvoorspelbaar wordt.
+Dit kan leiden tot downtime of prestatievermindering.
+
+
+5. Non-compliance met beveiligingsrichtlijnen
+
+Best practices zoals CIS Benchmarks, ISO-27001 en NIS2 vereisen dat:
+ongebruikte poorten worden uitgeschakeld,
+trunking alleen handmatig wordt ingesteld,
+VLAN’s expliciet worden toegewezen.
+
+
+
+
+
+
+
+
+
+
+Advies
+
+Om de veiligheid en beheersbaarheid van de netwerkstructuur te optimaliseren, bevelen wij de volgende maatregelen aan:
+
+1. Schakel alle ongebruikte poorten uit
+
+Configureer ongebruikte interfaces als:
+
+interface fastEthernet X/X
+ shutdown
+ switchport mode access
+ switchport access vlan <blackhole/guest/no-access-vlan>
+
+
+Dit voorkomt dat willekeurige apparaten automatisch verbinding kunnen maken.
+
+
+2. Zet alle actieve poorten expliciet in access- of trunkmodus
+
+Gebruik nooit dynamic auto of dynamic desirable. Onze aanbeveling:
+Access-poorten → switchport mode access
+Trunk-poorten → switchport mode trunk
+Zo wordt voorkomen dat een poort automatisch van rol verandert.
+
+
+3. Wijs VLAN’s handmatig toe
+
+Elke poort moet bewust worden toegewezen aan een VLAN op basis van functie of afdeling. Hiermee behoudt u volledige controle over netwerksegmentatie.
+
+
+4. Zet DTP volledig uit waar mogelijk
+
+Voeg op access-poorten toe:
+switchport nonegotiate
+
+Dit elimineert het risico dat de poort ongewenst in trunkmodus springt.
+
+
+5. Implementeer een “black hole VLAN” voor ongebruikte poorten
+
+In plaats van ongebruikte poorten in de standaard VLAN (meestal VLAN 1) te laten, is het beter om:
+een apart VLAN te maken zonder routingsmogelijkheden,
+ongebruikte poorten hierin te plaatsen.
+Zo blijft het netwerk gescheiden en veilig.
+
+
+6. Documenteer alle poortconfiguraties
+
+Maak een overzicht van:
+welke poorten in gebruik zijn,
+welke poorten uitgeschakeld zijn,
+welk VLAN per poort is toegewezen.
+Dit bevordert beheer, auditing en troubleshooting.
+
+
+7. Voer periodieke controles uit
+
+Wij adviseren om minstens twee keer per jaar:
+show interface status
+show interface switchport
+te controleren op afwijkingen, ongewenste modi en verkeerd toegewezen VLAN’s.
+
+Dit voorkomt dat configuraties in de loop van de tijd onbedoeld wijzigen.
+
+
+
+
+
+
+
+
+
+
+
+
+
+Wanneer dit niet gebeurt, voldoet het netwerk niet aan standaard beveiligingsnormen.
