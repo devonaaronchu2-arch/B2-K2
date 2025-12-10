@@ -1,0 +1,172 @@
+Omschrijving
+
+In deze beheertaak wordt beschreven dat alle ongebruikte switchpoorten standaard op ‘shutdown’ staan. 
+Dit betekent dat deze poorten administratief uitgeschakeld zijn en niet gebruikt kunnen worden totdat een beheerder ze expliciet activeert. 
+Het doel hiervan is de beveiliging van het netwerk te verhogen en ongewenste of ongeautoriseerde toegang via ongebruikte poorten te voorkomen.
+
+
+
+Uitvoering 
+
+Switch# Show running-config 
+
+
+
+Verwachting 
+
+interface  FastEthernet0/12
+  shutdown
+!
+interface  FastEthernet0/13
+  shutdown
+!
+interface  FastEthernet0/14
+  shutdown
+!
+interface  FastEthernet0/15
+  shutdown
+!
+interface  FastEthernet0/16
+  shutdown
+!
+interface  FastEthernet0/17
+  shutdown
+!
+interface  FastEthernet0/18
+  shutdown
+!
+
+
+
+
+
+
+
+
+
+
+Impact
+
+Het uitschakelen van ongebruikte switchpoorten heeft een positieve en significante impact op de netwerkbeveiliging. 
+Door deze maatregel wordt voorkomen dat onbevoegde apparaten zonder toestemming verbinding kunnen maken met het bedrijfsnetwerk. 
+Ongebruikte poorten vormen namelijk een veelvoorkomend aanvalspunt waar kwaadwillenden eenvoudig toegang kunnen verkrijgen.
+
+Belangrijkste beveiligingsimpact:
+
+1. Verminderd risico op ongeautoriseerde toegang
+
+Wanneer ongebruikte poorten actief zijn, kunnen bezoekers, externe medewerkers of kwaadwillenden een eigen apparaat aansluiten en toegang krijgen tot interne systemen. Met shutdown geconfigureerde poorten is dit risico sterk gereduceerd.
+
+
+2. Bescherming tegen ARP-, DHCP- en MAC-spoofing aanvallen
+
+Een open switchpoort kan gebruikt worden om malafide netwerkapparatuur aan te sluiten, zoals een rogue DHCP-server of sniffer. Door ongebruikte poorten uit te schakelen, wordt de kans op interne netwerkaanvallen aanzienlijk verkleind.
+
+
+3. Vermindering van laterale beweging binnen het netwerk
+
+Indringers die fysieke toegang krijgen tot een pand kunnen zonder deze maatregelen eenvoudig een foothold creëren via een open poort. Gesloten poorten blokkeren deze initiële toegang, wat de totale ketenbeveiliging versterkt.
+
+
+4. Stabiliteit van het netwerk wordt verbeterd
+
+Open poorten kunnen onbedoeld loops, broadcast-stormen of ongeautoriseerde verbindingen veroorzaken. Door ongebruikte poorten standaard uit te schakelen, neemt de algemene netwerkstabiliteit toe.
+
+
+5. Betere controle en inzicht
+
+Het actief beheren van poortstatussen geeft netwerkbeheerders een duidelijker beeld van wat er daadwerkelijk in gebruik is. Dit ondersteunt change management, incidentenonderzoek en capaciteitsplanning.
+
+
+
+
+
+
+
+Advies
+
+Op basis van de uitgevoerde controle adviseren wij om onderstaande best practices structureel toe te passen binnen de netwerkbeheerprocessen om de beveiliging en stabiliteit van het LAN verder te optimaliseren.
+
+
+1. Laat ongebruikte poorten standaard in “shutdown” staan
+
+Zet alle poorten die niet in gebruik zijn bewust in de administratieve shutdown-status. 
+Documenteer hierbij welke poorten bewust uit staan, zodat er geen onduidelijkheden ontstaan bij onderhoud of toekomstige wijzigingen.
+
+
+interface range Fa0/10 – 24
+ shutdown
+
+
+2. Maak gebruik van ‘port descriptions’ voor duidelijkheid
+
+Voeg bij elke geactiveerde poort een duidelijke omschrijving toe, zoals locatie, apparaat of gebruiker. Hierdoor is direct zichtbaar welke poorten actief horen te zijn.
+
+
+description Werkplek HR-afdeling
+
+
+3. Gebruik port-security op actieve poorten
+
+Poorten die wel worden gebruikt, kunnen extra beveiligd worden door MAC-gebaseerde port-security, waardoor alleen geautoriseerde apparaten verbinding kunnen maken.
+
+Adviesinstellingen:
+max 1 MAC-adres
+sticky mode
+shutdown of restrict bij overtreding
+
+
+4. Regelmatige audits
+
+Voer periodiek (minimaal kwartaal) een controle uit op:
+poorten die onbedoeld geactiveerd zijn
+poorten met fouten of loops
+afwijkende configuraties
+ongewenste MAC-adressen
+
+Dit kan via:
+
+
+show running-config
+show ip interface brief
+show port-security
+
+
+5. Toegangscontroleproces bij activeren van poorten
+
+Voorkom dat poorten willekeurig worden ingeschakeld. Zorg voor:
+een intern aanvraagproces
+logging van wijzigingen
+correcte documentatie van poorten die worden geopend
+
+Dit voorkomt organisatorische fouten die tot beveiligingslekken kunnen leiden.
+
+
+6. Combineer shutdown met VLAN-beleid
+
+Indien een poort tijdelijk open moet voor testdoeleinden of nog niet definitief in gebruik is, wijs deze dan toe aan een afzonderlijk niet-productie VLAN, zoals een ‘quarantine VLAN’.
+
+
+7. Training en awareness voor beheerders
+
+Een consistent beleid werkt alleen als alle betrokken IT-beheerders op de hoogte zijn van de procedure. Zorg daarom voor interne kennisdeling en standaarden rondom poortbeheer.
+
+
+
+
+
+
+
+Samenvatting voor de klant
+
+Het uitschakelen van ongebruikte poorten is een eenvoudige maar uiterst effectieve maatregel om ongeautoriseerde toegang tot het netwerk te voorkomen. 
+Het verhoogt niet alleen de beveiliging, maar ook de stabiliteit en beheersbaarheid van de IT-infrastructuur. 
+Met de aanvullende adviezen kan deze maatregel worden geïntegreerd in een duurzaam, professioneel netwerkbeveiligingsbeleid.
+
+
+
+
+
+
+
+
