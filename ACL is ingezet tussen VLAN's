@@ -1,0 +1,161 @@
+Omschrijving
+
+Een ACL is een lijst met regels die bepaalt welk verkeer er wordt toegestaan of geblokkeerd tussen VLAN’s.
+
+
+
+
+Uitvoering
+
+show running-config
+
+
+
+
+Verwachting
+
+Als er een ACL is ingesteld tussen de VLAN’s moet er bij het uitvoeren van het running-config commando onder de betreffende interfaces van de VLAN’s het volgende te zien zijn dat begint met “ip acces-group  <?> <?>”. (Zie voorbeeld hieronder)
+
+interface Vlan90 
+  mac-address 00e0.8f14.5502
+  ip-address 192.168.90.1 255.255.255.0
+  ip access-group 10 in                           <------------ deze regel heb je nodig dus OMCIRKEL het ook op je foto i think
+!
+
+
+
+
+
+
+
+
+
+Impact
+
+Wanneer er geen Access Control Lists (ACL’s) zijn geconfigureerd tussen de verschillende VLAN’s, kan dit meerdere risico’s veroorzaken voor de netwerkveiligheid en -stabiliteit. De belangrijkste impactpunten zijn:
+
+
+1. Ongecontroleerde communicatie tussen VLAN’s
+
+Zonder ACL’s kan elk apparaat in elk VLAN vrij communiceren met apparaten in andere VLAN’s. Dit ondermijnt het principe van netwerksegmentatie, waarbij VLAN’s juist zijn bedoeld om verkeer te scheiden.
+
+Risico’s:
+Onbevoegde toegang tot systemen en diensten.
+Verhoging van de kans op verspreiding van virussen of malware tussen segmenten.
+Privacygevoelige data kan op onbedoelde plekken toegankelijk zijn.
+
+
+2. Toename van aanvalsvectoren
+
+Als een aanvaller toegang krijgt tot één VLAN, kan deze zonder ACL’s vrij naar andere VLAN’s bewegen.
+
+Risico’s:
+Laterale beweging binnen het netwerk zonder belemmering.
+Grove schending van beveiligingsrichtlijnen (o.a. AVG/GDPR waar isolatie van data soms een eis is).
+Hogere impact van eventuele beveiligingsincidenten.
+
+
+3. Prestaties & stabiliteit
+
+Zonder filtering kan broadcast- en multicastverkeer makkelijker over meerdere VLAN’s bewegen als services verkeerd staan ingesteld.
+
+Risico’s:
+Onnodige belasting van routers/switches.
+Vertraagde netwerken door overmatig verkeer.
+Potentiële verstoringen van kritieke bedrijfsapplicaties.
+
+
+4. Non-compliance met beveiligingsbeleid
+
+Veel organisaties hebben interne IT-richtlijnen die scheiding van VLAN’s verplicht stellen om risico’s te beperken.
+
+Risico:
+
+Niet voldoen aan interne of externe audits.
+Negatieve impact op certificeringen (ISO 27001 of vergelijkbaar).
+
+
+
+
+
+
+
+
+
+
+
+Advies
+
+Onderstaande aanbevelingen zijn opgesteld om de beveiliging, stabiliteit en beheersbaarheid van het netwerk te verbeteren.
+
+
+1. Implementeer ACL’s op de router (Routed VLAN Interface – SVI)
+
+Stel inbound ACL’s in op de relevante VLAN-interfaces om te bepalen welk verkeer wel en niet is toegestaan.
+
+Aanbevolen aanpak:
+Identificeer welke VLAN’s met elkaar moeten kunnen communiceren.
+Definieer per VLAN welke protocollen essentieel zijn (bijv. HTTP, DNS, RDP).
+Creëer ACL’s die alleen het noodzakelijke verkeer toestaan (principle of least privilege).
+
+
+2. Documenteer de configuratie en het toegestane verkeer
+
+Zorg dat volledig duidelijk is:
+Waarom een bepaald type verkeer nodig is.
+Welke services per VLAN bereikbaar moeten zijn.
+Welke blokkades wenselijk of verplicht zijn.
+
+Voordeel:
+Eenvoudigere troubleshooting en betere audit-traceability.
+
+
+3. Overweeg aanvullende beveiligingsmaatregelen
+
+Naast ACL’s kunnen extra maatregelen de beveiliging versterken:
+• Port security
+
+Beperk welke MAC-adressen toegang mogen krijgen tot een switchport.
+• DHCP snooping & Dynamic ARP Inspection
+
+Bescherm het netwerk tegen rogue DHCP-servers en ARP-spoofing.
+• VLAN-toewijzing op basis van security-niveau
+
+Bijvoorbeeld:
+VLAN voor management
+VLAN voor medewerkers
+VLAN voor gasten
+VLAN voor IoT-apparaten
+
+
+4. Monitoring en logging inschakelen
+
+Implementeer system logging op de router/switch zodat:
+Afgewezen pakketten zichtbaar worden.
+Ongewenste toegangspogingen onmiddellijk worden gesignaleerd.
+Dit helpt bij zowel beveiliging als troubleshooting van mogelijke configuratiefouten.
+
+
+5. Periodieke review van ACL’s
+
+Omdat bedrijfsbehoeften veranderen, is het verstandig om ACL’s regelmatig te evalueren.
+Aanbevolen frequentie:
+1× per kwartaal of bij elke wijziging in netwerkarchitectuur.
+
+
+
+Samenvatting voor de klant
+
+Uw huidige netwerkconfiguratie lijkt geen ACL’s te gebruiken om communicatie tussen VLAN’s te reguleren. 
+Hierdoor bestaat het risico dat ongeautoriseerd verkeer tussen netwerkdelen vrij kan plaatsvinden, wat de kans op beveiligingsincidenten vergroot en negatieve invloed kan hebben op netwerkprestaties en compliance-eisen.
+
+Door het implementeren van gerichte ACL’s, aanvullende beveiligingsfeatures, monitoring en regelmatige reviews wordt het netwerk beter beveiligd en beheersbaar.
+
+
+
+
+
+
+
+
+
