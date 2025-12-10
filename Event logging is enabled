@@ -1,0 +1,345 @@
+VOOR DE ZEKERHEID HEB IK DE TEKST VAN JACQUES HELEMAAL ONDERAAN GEPLAATST ALS JE HET NIET SNAPT WAT HIERONDER STAAT <---------------------------
+
+
+
+Omschrijving
+
+In deze beheertaak wordt gecontroleerd of event logging is ingeschakeld op de switch. Event logging is essentieel voor het monitoren van systeemactiviteiten, foutopsporing en beveiligingsanalyse.
+Wanneer logging is ingeschakeld, registreert de switch belangrijke gebeurtenissen zoals interface up/down meldingen, configuratiewijzigingen, beveiligingswaarschuwingen en systeemfouten.
+
+Daarnaast wordt uitgelegd hoe logging volgens best practices wordt ingesteld, inclusief het verzenden van logs naar een externe Syslog-server. 
+Dit voorkomt dat loggegevens verloren gaan bij herstarten van de switch en zorgt ervoor dat alle gebeurtenissen voorzien zijn van correcte tijdstempels (in combinatie met NTP).
+
+
+
+
+Uitvoering
+1. Controleren of event logging actief is
+
+Gebruik het volgende commando:
+
+
+show logging
+
+
+
+
+Controleer of er in de output het volgende staat:
+
+
+Syslog logging: enabled
+
+
+Als dit zichtbaar is, staat basis logging aan.
+
+
+
+Extra controle:
+
+
+show running-config | include logging
+
+
+Hiermee kun je controleren of logs naar een extern IP-adres (Syslog-server) worden verzonden.
+
+
+
+
+
+2. Logging volgens best practice configureren
+
+Voor optimale monitoring is het aanbeveling om logberichten naar een externe Syslog-server te sturen. Dit zorgt ervoor dat:
+logs niet verloren gaan wanneer de switch herstart
+logs worden voorzien van accurate tijdstempels in combinatie met NTP
+beveiligingsincidenten centraal kunnen worden geanalyseerd
+audits en troubleshooting eenvoudiger worden
+
+Configuratiestappen
+
+Ga naar de configuratiemodus:
+
+configure terminal
+
+
+Stel de Syslog-server in (vervang 192.168.99.10 door jouw serveradres):
+
+
+
+logging host 192.168.99.10
+Optioneel maar aanbevolen: stel de logging severity in (bijv. warnings en hoger):
+
+
+
+logging trap warnings
+
+
+Indien de netwerkapparatuur NTP gebruikt:
+
+
+
+ntp server <IP-adres NTP>
+
+
+Dit zorgt ervoor dat datum en tijd correct worden geregistreerd, iets wat cruciaal is voor troubleshooting en forensics.
+
+
+
+
+Sla de configuratie op:
+
+
+write memory
+
+
+
+
+
+
+
+
+
+
+
+Verwachting
+
+Na het uitvoeren van deze controles en configuratie verwacht je het volgende:
+
+1. Controle van bestaande logging
+
+Bij het uitvoeren van:
+
+
+show logging
+
+
+zie je:
+Syslog logging: enabled
+recente logberichten
+eventuele meldingen naar externe servers
+
+
+Bij:
+
+show running-config | include logging
+
+
+zie je regels zoals:
+
+logging host 192.168.99.10
+logging trap warnings
+
+
+
+2. Na configuratie van de Syslog-server
+
+De switch zal:
+actief logberichten naar de Syslog-server sturen
+meldingen bevatten met correcte datum- en tijdstempels (via NTP)
+logs bewaren, zelfs na een reload of stroomuitval
+centraal te monitoren zijn voor incidenten en foutopsporing
+Deze configuratie resulteert in een robuuste, professionele logging-omgeving die voldoet aan best practices voor netwerkbeheer.
+
+
+
+
+
+
+
+
+
+
+
+
+Impact
+
+Indien event logging niet is ingeschakeld, of niet correct is geconfigureerd, heeft dit aanzienlijke gevolgen voor de stabiliteit, veiligheid en beheersbaarheid van het netwerk:
+
+
+1. Beperkte zichtbaarheid bij storingen
+
+Zonder logging is er geen tijdlijn van gebeurtenissen. Dit maakt het extreem moeilijk om:
+de oorzaak van netwerkuitval te achterhalen
+te zien wanneer interfaces up/down zijn gegaan
+te bepalen welke configuratiewijzigingen door gebruikers of beheerders zijn uitgevoerd
+
+Problemen duren hierdoor langer, met mogelijk impact op bedrijfsprocessen.
+
+
+2. Verlies van loggegevens bij herstart
+
+Wanneer logging niet naar een externe Syslog-server wordt gestuurd, gaan alle logs verloren zodra:
+de switch wordt herstart
+er een stroomonderbreking optreedt
+er een IOS-crash plaatsvindt
+
+Dit maakt post-incident-analyse vrijwel onmogelijk.
+
+
+3. Onvoldoende veiligheidsmonitoring
+
+Zonder correcte logging missen belangrijke beveiligingsgebeurtenissen, zoals:
+mislukte loginpogingen
+poort-security schendingen
+ARP-detectie waarschuwingen
+configuratiepogingen door ongeautoriseerde gebruikers
+
+Hierdoor blijft verdachte of schadelijke activiteit onopgemerkt.
+
+
+4. Compliance- en auditrisico’s
+
+Voor veel organisaties is logregistratie verplicht volgens:
+interne security policies
+auditvereisten
+wettelijke normen (zoals ISO27001, NEN7510 of GDPR, afhankelijk van sector)
+
+Ontbrekende logs kunnen leiden tot afkeur bij audits.
+
+
+5. Geen betrouwbare tijdstempels
+
+Als er geen NTP is geconfigureerd:
+logmeldingen hebben geen nauwkeurige tijd
+correlatie met andere systemen is onmogelijk
+incidentanalyse raakt onbetrouwbaar
+
+Dit maakt troubleshooting of security-analyse feitelijk waardeloos.
+
+
+
+
+
+
+
+
+
+
+
+Advies
+
+Om de betrouwbaarheid en beveiliging van het netwerk te waarborgen, adviseren wij het volgende:
+
+
+1. Schakel altijd basis event logging in
+
+Zorg ervoor dat:
+
+
+Syslog logging: enabled
+
+
+zichtbaar is in de output van show logging.
+
+Dit garandeert dat het netwerkapparaat interne gebeurtenissen bijhoudt.
+
+
+2. Configureer een externe Syslog-server (best practice)
+
+Stuur alle logberichten naar een centraal monitorings- of beheersysteem.
+
+Voorbeeld:
+
+
+logging host <IP-adres-Syslog-server>
+
+
+Voordelen hiervan:
+loggegevens blijven behouden na een reboot
+beveiligings- en foutmeldingen worden centraal geanalyseerd
+beheer en auditing worden sterk vereenvoudigd
+incidenten zijn sneller op te sporen
+
+3. Stel een passende severity in
+
+Wij adviseren minimaal:
+
+
+logging trap warnings
+
+
+Hiermee worden belangrijke meldingen wel vastgelegd, maar blijft de logging overzichtelijk.
+
+
+4. Configureer NTP voor correcte tijdstempels
+
+Een Syslog zonder exacte datum en tijd is weinig waard.
+
+Gebruik:
+
+
+ntp server <IP-adres NTP>
+
+
+Dit zorgt voor:
+correcte tijdsregistratie
+betrouwbare forensics
+goede correlatie met logs van andere systemen
+
+
+5. Controleer regelmatig de logging-status
+
+Wij adviseren om periodiek (bijv. maandelijks) te controleren:
+of logging nog actief is
+of het Syslog-serveradres bereikbaar is
+of het volume aan logberichten passend is
+of er kritieke of terugkerende meldingen zijn
+
+
+6. Documenteer en borg de loggingconfiguratie
+
+Leg vast:
+welke server wordt gebruikt
+welke severity wordt gelogd
+welke netwerkapparaten logs genereren
+hoe incidentmeldingen worden behandeld
+
+Zo blijft logging een blijvend onderdeel van het netwerkbeheer en niet slechts een eenmalige configuratie.
+
+
+
+
+
+
+
+
+
+
+Hoe Controleer Ik of Event Logging Aanstaat?
+Het meest directe commando is om te zien of de logging-service actief is.
+
+Commando: show logging
+
+Controle: Zoek in de output naar de regel Syslog logging: enabled. Als je dit ziet, staat de basisservice aan.
+
+OOK HANDIG: show running-config | include logging ( hier kan je zien naar welk IP de events worden gestuurd en kan je cross-checken of dit goed is. ) 
+
+Wat is de Beste Praktijk om het Aan te Zetten?
+De beste praktijk is niet alleen om het aan te zetten, maar om de berichten ook naar een externe Syslog-server te sturen. 
+
+(NIET NODIG MAAR WEL HANDIG OM UIT TE LEGGEN VOOR ADVIES) 
+Stappen voor de beste praktijk:
+
+Configureer een Externe Syslog-server: Vervang 192.168.99.10 door het IP-adres van je logging-server.
+
+configure terminal
+logging host 192.168.99.10
+Sla op:
+
+Eén Reden Waarom het Handig is
+Event logging is essentieel voor foutopsporing (troubleshooting).
+
+Door de logs aan te hebben staan, heb je een tijdlijn van elke gebeurtenis op de switch (bijvoorbeeld wanneer een link up of down ging, of wanneer er een configuratiewijziging was).
+
+Dit stelt je in staat om de oorzaak van netwerkproblemen, storingen of onverwachte herstarts veel sneller en nauwkeuriger te achterhalen.
+
+
+for the other one
+i test it quickly in cisco to make sure its right
+it works
+het eerste stuk is om te kijken of basis event logging aanstaat door gewoon show logging te doen
+en het tweede is handig omdat dan voeg je het toe aan je NTP server en zo registreer je tijd en datum enzo want anders blijft het op je switch en als die herstart ofzo is de informatie gone
+dus tweede stuk is correcte configuratie van
+
+
+
+
