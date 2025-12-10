@@ -1,0 +1,77 @@
+Omschrijving
+
+Syslog is het opslaan van meldingen die op de prompt van een router of switch verschijnen, bij een centrale server bekeken worden gemaakt 
+
+
+
+Uitvoering
+
+In de server check je onder services of syslog aan staat. Zo ja,
+In de router voor je het volgende in:
+
+switch> Enable
+switch# conf t
+switch(config)# do show logging
+
+ERGENS HOOR JE NU TE ZIEN STAAN
+
+No active Message discriminator
+
+No inactive Message discriminator   <---------------- KIJK GOED IS IETS ANDERS ER STAAT INACTIVE
+
+
+Verwachting
+
+Er zitten geen discriminators op dus logged die alles.
+
+MAAK EEN FOTO VOOR OP JE EXAMEN TRUSTTTTTTTTTTTTTT
+
+
+
+
+
+Impact
+
+Het configureren en activeren van Syslog op netwerkapparatuur heeft zowel positieve als operationele effecten. Onderstaand overzicht geeft de verwachte impact op de infrastructuur en het beheerproces.
+
+
+1. Verbeterde zichtbaarheid en monitoring
+
+Door Syslog op de router of switch te activeren, worden systeemmeldingen centraal geregistreerd. Hierdoor:
+Krijgt de beheerafdeling realtime inzicht in fouten, waarschuwingen en statusupdates;
+Kunnen incidenten sneller worden gedetecteerd en opgelost;
+Wordt het eenvoudiger om patronen te herkennen die duiden op storingen of beveiligingsproblemen.
+
+
+2. Geen verstoring van netwerkverkeer
+
+Het inschakelen van Syslog op Cisco-apparatuur veroorzaakt geen merkbare onderbreking van het netwerkverkeer. Het proces draait in de achtergrond en vereist geen herstart van het apparaat. De impact op throughput of latency is minimaal.
+
+
+3. Toegenomen belasting op logopslag (indien extern)
+
+Wanneer Syslog wordt doorgestuurd naar een externe Syslog-server, kan er extra netwerkverkeer ontstaan. Dit is doorgaans zeer beperkt:
+Enkele kilobytes aan tekst per gebeurtenis;
+Geen invloed op productietrafiek of prestaties.
+In Packet Tracer blijft deze impact minimaal gezien de gesimuleerde omgeving.
+
+
+4. Geen actieve of inactieve discriminators
+
+Omdat er – zoals in de output aangetoond – geen message discriminators zijn ingesteld, worden alle logberichten doorgestuurd. Dit kan leiden tot:
+Een grotere hoeveelheid logdata;
+Minder overzicht wanneer specifieke filters of prioriteiten ontbreken;
+Moeilijkere analyse bij incidenten als er geen onderscheid gemaakt wordt tussen kritieke en informatieve berichten.
+
+
+5. Veiligheidsrelevante meldingen worden vastgelegd
+
+Door Syslog volledig te activeren, worden ook beveiligingsgerelateerde gebeurtenissen geregistreerd, zoals:
+Mislukte login-pogingen;
+Interface-up/down meldingen;
+Configuratieveranderingen.
+Dit draagt bij aan audit trails en security compliance.
+
+
+
+
