@@ -1,0 +1,142 @@
+Omschrijving
+
+Deze beheertaak richt zich op het controleren of **VLAN 1** actief is op een netwerkapparaat (zoals een switch of router). VLAN 1 is in veel gevallen het standaard VLAN waarin apparaten zich bevinden wanneer geen ander VLAN is toegewezen. Hoewel het technisch functioneel is, wordt het in beveiligingsgevoelige omgevingen vaak afgeraden om VLAN 1 actief te gebruiken vanwege risico's op broadcast storms, man-in-the-middle-aanvallen en andere kwetsbaarheden. 
+
+
+
+Uitvoering
+
+show vlan brief <------------------------- DE COMMAND
+
+
+
+Verwachting
+
+VLAN Name                             Status    Ports
+---------------------------------------------------------------------------------- <--- dont worry deze lijn is omdat het een tabel is ze horen bij elkaar
+1    default                          active    Fa0/1, Fa0/2, Gi0/1
+
+
+
+
+
+
+
+
+
+
+
+Impact
+
+Wanneer VLAN 1 actief is op netwerkapparatuur kan dit meerdere technische en beveiligingsrisico’s met zich meebrengen:
+
+
+1. Verhoogd risico op beveiligingsincidenten
+
+VLAN 1 is op veel netwerkapparaten de standaard management-VLAN. Omdat dit wereldwijd bekend en voorspelbaar is, vormt het een aantrekkelijk doelwit voor aanvallers. 
+
+Indien VLAN 1 actief blijft op access- of trunkpoorten, kan een aanvaller mogelijk:
+Toegang krijgen tot managementverkeer.
+Eenvoudiger netwerkverkeer onderscheppen of manipuleren.
+Misbruik maken van VLAN hopping-technieken.
+
+
+2. Vergroot oppervlak voor misconfiguraties
+
+Omdat VLAN 1 standaard op vrijwel alle poorten actief is, is het moeilijker om overzicht te houden over welke poorten daadwerkelijk in gebruik zijn. 
+
+Dit kan leiden tot:
+Onbedoeld openstaande poorten op VLAN 1.
+Onvoorziene verbindingen waardoor ongeautoriseerde apparaten toegang kunnen krijgen.
+
+
+3. Risico op broadcast storms
+
+VLAN 1 wordt vaak gebruikt voor broadcastverkeer dat door switches standaard wordt doorgelaten. 
+
+Wanneer VLAN 1 actief blijft op ongewenste poorten, kan dit resulteren in:
+Onnodige belasting van het netwerk.
+Prestatieproblemen doordat broadcastverkeer ongefilterd blijft circuleren.
+
+
+4. Afwijking van best practices en compliancerisico
+
+In beveiligingsgevoelige netwerkomgevingen adviseren leveranciers zoals Cisco om VLAN 1 niet te gebruiken voor productie- of managementverkeer. 
+
+Een actieve VLAN 1-configuratie kan daarom leiden tot:
+Niet voldoen aan securityrichtlijnen.
+Problemen bij audits en compliance-checks.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Advies
+
+1. Verplaats managementverkeer naar een dedicated management-VLAN
+
+Maak een nieuw, specifiek VLAN aan voor managementdoeleinden (bijv. VLAN 10 “MGMT”) en configureer:
+Managementinterfaces (SVI) op dit VLAN.
+Toegang tot dit VLAN alleen via beveiligde poorten.
+Toepassing van ACL’s om toegang te beperken tot geautoriseerde beheernetwerken.
+
+
+2. Deactiveer VLAN 1 op accessports
+
+Om te voorkomen dat ongewenst verkeer over VLAN 1 kan lopen:
+Zet alle access-poorten in een specifiek VLAN (bijv. VLAN 20 “Users”).
+Verwijder VLAN 1 van accessports:
+
+interface Fa0/1
+ switchport access vlan 20
+
+Controleer dat er geen poorten meer onbedoeld in VLAN 1 zitten.
+
+
+3. Verwijder VLAN 1 van trunklinks waar mogelijk
+
+Op trunkpoorten is VLAN 1 vaak standaard toegestaan. Verwijder deze expliciet:
+
+interface Gi0/1
+ switchport trunk allowed vlan remove 1
+
+Dit voorkomt dat management- of broadcastverkeer via trunklinks op andere delen van het netwerk terechtkomt.
+
+
+4. Harden het netwerk volgens Cisco best practices
+
+Disable ongebruikte poorten (shutdown).
+Plaats ongebruikte poorten in een “blackhole VLAN” (bijv. VLAN 999).
+
+Zet BPDU Guard, Port Security en Storm Control aan waar van toepassing.
+
+Zorg voor regelmatige audits op VLAN-configuraties.
+
+
+5. Voer documentatie en configuratiebeheer in
+
+Leg alle VLAN’s, poorten en toegewezen apparaten vast.
+
+Zorg dat wijzigingen consequent worden gedocumenteerd.
+
+Monitor regelmatig of VLAN 1 weer per ongeluk actief is geworden door nieuwe configuraties.
+
+
+
+
+
+Kort samengevat
+
+Het actief hebben van VLAN 1 brengt duidelijke beveiligings- en operationele risico’s met zich mee. 
+Door VLAN 1 te deactiveren, een dedicated management-VLAN in te richten en trunk- en accesspoorten correct te configureren, wordt de netwerkbeveiliging aanzienlijk versterkt en worden best practices gevolgd.
+
+
