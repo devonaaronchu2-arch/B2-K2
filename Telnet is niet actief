@@ -1,0 +1,271 @@
+Omschrijving
+
+Checken of er toegang is via telnet en het aanzetten indien nodig   
+
+
+
+
+Uitvoering
+
+1. Controleer of de interface een IP heeft en actief is
+
+Enable -> show ip interface brief
+
+
+
+1. Controleer of VTY-lijnen correct zijn ingesteld
+
+Enable -> show running-config | section line vty
+
+Je moet dit zien:
+
+line vty 0 4
+
+password cisco
+
+login
+
+
+
+1. Controleer of er een enable-wachtwoord is
+
+Enable -> show running-config | include enable
+
+Je moet dit zien:
+
+enable secret class
+
+
+
+
+1. Controleer of een ACL Telnet blokkeert
+
+Enable -> show access-lists
+
+Enable -> show running-config | include access-group
+
+Geen regels zoals:
+
+deny tcp any any eq 23
+
+
+
+
+1. Ping het apparaat vanaf een PC
+
+ping 192.168.1.1
+
+Als ping lukt, is er netwerkverbinding.
+
+
+
+
+1. Test Telnet vanaf PC
+
+Op een PC in Packet tracer die aan is gesloten op het netwerk
+
+telnet 192.168.1.1
+
+er moet om een wachtwoord gevraagd worden.
+
+
+
+
+
+
+Verwachting
+
+Je moet via Telnet kunnen verbinden en inloggen op het apparaat.
+
+
+
+
+
+
+
+
+
+
+Impact
+
+Het niet correct configureren of uitschakelen van Telnet heeft directe gevolgen voor de bereikbaarheid en veiligheid van netwerkapparatuur. Telnet is een verouderd protocol zonder encryptie, waardoor het gebruik aanzienlijke risico’s met zich meebrengt.
+
+
+1. Onveilig beheer van netwerkapparatuur (kritiek risico)
+
+Telnet verzendt alle gegevens — inclusief wachtwoorden — in platte tekst over het netwerk. Een aanvaller die het netwerkverkeer afluistert, kan met eenvoudige middelen zoals Wireshark:
+gebruikersnamen en wachtwoorden onderscheppen
+volledige beheerrechten verkrijgen
+configuraties manipuleren of verwijderen
+toegang krijgen tot andere delen van het netwerk
+
+Dit vormt een ernstig bedrijfsrisico en kan leiden tot volledige compromittering van het netwerk.
+
+
+2. Non-compliance met moderne beveiligingsnormen
+
+Het gebruik van Telnet is niet toegestaan onder vrijwel alle hedendaagse securityrichtlijnen, zoals:
+ISO27001
+NEN7510
+CIS Controls
+BIO (overheid)
+interne security policies
+
+Auditors beschouwen Telnet als een ‘high-risk’ protocol. Het actief hebben van Telnet leidt vrijwel altijd tot negatieve auditbevindingen.
+
+
+3. Vergroot risico bij interne en externe dreigingen
+
+Elke medewerker met netwerktoegang — zelfs op een gastnetwerk als er segmentatie ontbreekt — kan:
+inloggen op switches en routers via Telnet
+wachtwoorden sniffen
+laterale beweging uitvoeren (“pivoting”)
+netwerksegmenten uitschakelen
+
+Dit maakt de organisatie kwetsbaar voor zowel kwaadwillenden van buitenaf als interne dreigingen (bv. stagiairs, tijdelijke medewerkers).
+
+
+4. Disruptie van bedrijfsprocessen bij misconfiguraties
+
+Als Telnet niet correct is geactiveerd of verkeerd is geconfigureerd, kunnen beheerders mogelijk niet meer op afstand inloggen op apparaten. Dit kan leiden tot:
+vertraging bij storingsoplossing
+langere downtime bij incidenten
+noodzaak tot fysieke aanwezigheid op locatie
+Voor bedrijven met meerdere locaties leidt dit direct tot hogere operationele kosten.
+
+
+5. Onbeveiligde toegang via VTY-lijnen
+
+Wanneer er géén ACL’s, géén enable-wachtwoord of zwakke wachtwoorden zijn ingesteld kan:
+iedereen op het netwerk een Telnet-sesie openen
+brute-force aanvallen eenvoudig slagen
+onbevoegde toegang worden verkregen zonder dat dit wordt opgemerkt
+
+Hierdoor ontstaat een onbetrouwbare en oncontroleerbare beheeromgeving.
+
+
+
+
+
+
+
+
+Advies
+
+Om de beveiliging en betrouwbaarheid van het netwerk te verbeteren, adviseren wij de volgende maatregelen. Deze adviezen zijn gebaseerd op best practices binnen professionele netwerkbeveiliging.
+
+
+1. Schakel Telnet volledig uit en gebruik SSH (sterk aanbevolen)
+
+Telnet is verouderd en onveilig. De standaard moet zijn:
+
+
+line vty 0 4
+ transport input ssh
+
+
+Configureer vervolgens SSH:
+
+
+ip domain-name <organisatie>.local
+crypto key generate rsa general-keys modulus 2048
+ip ssh version 2
+
+
+Waarom?
+SSH versleutelt alle communicatie, inclusief wachtwoorden en commando’s. Hiermee voldoet de organisatie aan moderne beveiligingsstandaarden.
+
+
+2. Gebruik sterke en versleutelde wachtwoorden
+
+Zorg dat op VTY-lijnen nooit een wachtwoord in plaintext staat:
+
+Gebruik:
+
+
+username admin privilege 15 secret <sterk wachtwoord>
+line vty 0 4
+ login local
+
+
+En activeer:
+
+
+service password-encryption
+
+
+3. Beperk toegang met ACL’s (toegestaan verkeer)
+
+Zorg dat beheer alleen mogelijk is vanaf specifieke beheernetwerken:
+
+Voorbeeld:
+
+
+access-list 10 permit 192.168.1.0 0.0.0.255
+access-list 10 deny any
+line vty 0 4
+ access-class 10 in
+
+
+Hiermee wordt remote management alleen toegestaan vanaf het interne beheernetwerk.
+
+
+4. Zorg voor een werkend enable secret wachtwoord
+
+Gebruik altijd:
+
+
+enable secret <sterk wachtwoord>
+
+
+Nooit:
+
+
+enable password <woord>
+
+
+Enable secret is versleuteld (type 5 of 9), enable password niet.
+
+
+5. Implementeer monitoring en logging
+
+Voorzie netwerkapparatuur van:
+syslog logging
+login attempt alerts
+auditlogs van beheeractiviteiten
+
+Hiermee worden mislukte of verdachte loginpogingen gedetecteerd.
+
+
+6. Beperk fysieke toegang tot apparatuur
+
+Omdat toegang tot de consolepoort volledige controle geeft, adviseren wij:
+afgesloten patchkasten/serverruimtes
+badge-toegang
+camerabewaking
+logging van fysieke toegang
+
+
+7. Documenteer en standaardiseer remote management
+
+Stel een beheerrichtlijn op waarin staat:
+SSH verplicht
+wachtwoorden minimaal 12–15 tekens
+regelmatige wachtwoordrotatie
+alleen toegang vanaf beheernetwerken
+geen Telnet in productieomgevingen
+
+Dit zorgt voor consistent beheer en helpt bij audits.
+
+
+
+
+
+
+
+Samenvatting voor de klant
+
+Telnet is een ernstig beveiligingsrisico omdat alle gegevens onversleuteld worden verzonden. 
+Hierdoor kan een aanvaller eenvoudig gevoelige informatie onderscheppen en volledige controle over het netwerk verkrijgen. 
+Wij adviseren Telnet volledig uit te schakelen en over te stappen op SSH, in combinatie met sterke wachtwoorden, ACL’s en logging. 
+Deze maatregelen brengen uw netwerkomgeving naar een professioneel en veilig niveau en voldoen aan moderne beveiligingsstandaarden.
