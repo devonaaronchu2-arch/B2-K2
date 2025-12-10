@@ -1,0 +1,126 @@
+Omschrijving
+
+Het houdt in dat ik de os versie van de switches en routers moet controleren doormiddel van het opvragen encontroleren.
+
+
+
+Uitvoering
+
+Met het commando **Show Version** kan je bekijken welke versie
+
+switch> en
+switch# show version
+
+
+
+JE ZIET DE VERSIE DAN STAAN
+
+
+
+
+
+
+Impact
+
+Het niet controleren of gebruiken van een recente en ondersteunde IOS-versie op routers en switches kan aanzienlijke risico’s met zich meebrengen voor de stabiliteit, veiligheid en prestaties van het netwerk. De belangrijkste impactpunten zijn:
+
+
+1. Verhoogde kwetsbaarheid voor beveiligingslekken
+
+Verouderde IOS-versies bevatten vaak bekende beveiligingsproblemen die door kwaadwillenden kunnen worden misbruikt. Hierdoor ontstaat het risico op:
+ongeautoriseerde toegang tot netwerkapparatuur,
+het uitvoeren van remote code execution,
+verstoring van netwerkverkeer door exploits.
+Dit vormt een directe bedreiging voor de beschikbaarheid, integriteit en vertrouwelijkheid van het netwerk.
+
+
+2. Beperkte ondersteuning en geen bugfixes
+
+Cisco levert geen patches of ondersteuning meer voor oudere versies. Hierdoor blijven bestaande problemen onopgelost. Dit kan leiden tot:
+onverwachte crashes of herstarts,
+instabiel netwerkgedrag,
+incompatibiliteit met nieuwere hardware of functies.
+
+
+3. Niet voldoen aan compliance-eisen
+
+Veel organisaties vallen onder kaders zoals ISO-27001, NIS2 of interne security policies. Het gebruik van verouderde firmware valt buiten deze normering en kan leiden tot negatieve auditbevindingen, wat in sommige sectoren zelfs juridische gevolgen kan hebben.
+
+
+4. Prestatieproblemen door achterhaalde functionaliteit
+
+Nieuwe IOS-versies bevatten prestatie-optimalisaties en verbeterde protocollen. Bij oudere versies kunnen knelpunten ontstaan zoals:
+inefficiënte routing,
+beperkte ondersteuning voor moderne encryptiestandaarden,
+beperkingen in QoS, VLAN’s of security features.
+Dit kan de netwerkprestaties merkbaar beïnvloeden.
+
+
+5. Verhoogde kans op configuratie-inconsistentie
+
+Wanneer verschillende netwerkapparaten verschillende IOS-versies draaien, kunnen afwijkende functies of commando’s leiden tot:
+fouten in configuratiescripts,
+onvoorspelbaar netwerkgedrag,
+extra beheerlast voor IT-teams.
+
+
+
+
+
+
+
+
+
+Advies
+
+Om de betrouwbaarheid en veiligheid van de netwerkstructuur te waarborgen, bevelen wij de volgende maatregelen aan:
+
+
+1. Update naar de nieuwste stabiele en ondersteunde IOS-versie
+
+Controleer bij Cisco welke versies op dit moment:
+supported,
+stable
+en security-compliant
+zijn voor het betreffende model. Werk het apparaat bij naar de meest recente aanbevolen release.
+
+
+2. Documenteer alle gebruikte IOS-versies
+
+Zorg voor een centraal overzicht waarin staat:
+welke apparaten in gebruik zijn,
+welke IOS-versie zij draaien,
+wat de supportstatus van deze versie is.
+Dit vereenvoudigt beheer en maakt audit- of securitycontroles efficiënter.
+
+
+3. Voer periodieke firmware- en security-scans uit
+
+Wij adviseren om:
+minimaal elk kwartaal de IOS-versies te controleren,
+security advisories van Cisco te monitoren,
+updates in te plannen als onderdeel van regulier beheer.
+
+
+4. Test updates in een gecontroleerde omgeving
+
+Voordat een update in de productieomgeving wordt uitgerold, is het aanbevolen deze eerst te testen (bijvoorbeeld in Packet Tracer of op een labdevice). Dit verkleint de kans op verstoringen na de update.
+
+
+5. Zorg voor een rollback-strategie
+
+Maak altijd vooraf:
+een back-up van de huidige configuratie,
+een kopie van de bestaande IOS-image.
+Mocht de update onverwachte problemen veroorzaken, dan kan eenvoudig worden teruggeschakeld.
+
+
+6. Schakel logging en monitoring in
+
+Door systematisch te monitoren op fouten en opvallende gebeurtenissen, worden mogelijke problemen vroegtijdig gesignaleerd. Combineer dit met syslog, SNMP of een NMS-oplossing.
+
+
+
+
+
+
