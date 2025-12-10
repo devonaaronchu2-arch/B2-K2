@@ -1,0 +1,117 @@
+Omschrijving
+
+In deze beheertaak controleer je of de startup-config aanwezig is op een router en op een switch. 
+De startup-config is de configuratie waarmee de router/switch opstart. 
+Zonder startup-config start een router of switch met de default-settings. 
+Instellingen als IP-adressen, VLANs, portsecurity, etc., zijn dus niet ingesteld. (Zie wiki netwerken pagina 47)
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Uitvoering
+
+Als je wil zien of de startup-config aanwezig is kun je met het volgende commando zien of er een start-up config aanwezig is.
+
+dir nvram:
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Verwachting
+
+Na het uitvoeren van het commando kun je zien ik de startup-config te zien is. In dit voorbeeld is de startup-config aanwezig. 
+Zie screenshot.
+
+Swich#dir nvram:
+Directory of nvram: /
+
+  238 -rw-          993            <no date> startup-config
+
+993 bytes total (2337588 bytes free)
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Impact
+
+
+Het ontbreken of aanwezig zijn van een startup-config op een router of switch heeft directe gevolgen voor de stabiliteit, betrouwbaarheid en beveiliging van het netwerk.
+
+Wanneer de startup-config aanwezig is
+
+Als er een geldige startup-config aanwezig is, betekent dit dat:
+
+De router of switch bij een herstart automatisch terugkeert naar de vooraf vastgelegde, correcte instellingen.
+
+Netwerkfunctionaliteiten zoals IP-adressering, VLAN-configuratie, routingprotocollen en beveiligingsinstellingen behouden blijven.
+
+De kans op uitval of onverwachte wijzigingen sterk wordt verminderd.
+
+Het apparaat voorspelbaar functioneert volgens de afgesproken netwerkstandaarden en beleidsregels.
+
+Dit draagt bij aan continuïteit, stabiliteit en veiligheid binnen het netwerk van de klant.
+
+Wanneer de startup-config niet aanwezig is
+
+Als de startup-config ontbreekt, zijn de gevolgen aanzienlijk:
+
+Het apparaat start op met factory default settings.
+
+VLAN’s, IP-instellingen, wachtwoorden, ACL’s, trunking en overige beveiligingsmaatregelen gaan verloren.
+
+De router of switch zal niet correct functioneren binnen de bestaande netwerkarchitectuur.
+
+Er ontstaat een verhoogd risico op netwerkuitval of misconfiguraties.
+
+Beveiligingsrisico’s nemen aanzienlijk toe doordat essentiële beveiligingsinstellingen missen.
+
+Herconfiguratie moet handmatig worden uitgevoerd, wat zorgt voor extra downtime en extra kosten.
+
+Voor een bedrijfsnetwerk kan dit leiden tot verstoringen in bedrijfsprocessen, productiviteitsverlies en mogelijke beveiligingsincidenten.
+
+
+
+Advies
+
+
+Om de betrouwbaarheid en beschikbaarheid van het netwerk te waarborgen, adviseren wij het volgende:
+
+1. Zorg dat elke router en switch een actuele startup-config bevat
+
+Voer na iedere configuratiewijziging het commando copy running-config startup-config (of write memory) uit.
+
+Hiermee worden de huidige instellingen permanent opgeslagen en blijven ze behouden na een reboot.
+
+2. Maak gebruik van een configuratiebeheerproces
+
+Documenteer wijzigingen in een wijzigingslogboek.
+
+Voer configuratie-updates gestructureerd en volgens interne change management-processen uit.
+
+Houd configuratieversies bij zodat eerdere versies indien nodig hersteld kunnen worden.
+
+3. Maak regelmatig back-ups van configuraties
+
+Sla configuraties op een centrale, beveiligde locatie op (bijv. TFTP/FTP/SCP server).
+
+Automatiseer dit proces indien mogelijk.
+
+Bewaar meerdere versies om snel te kunnen terugvallen bij storingen of beveiligingsincidenten.
+
+4. Controleer periodiek de aanwezigheid van de startup-config
+
+Neem een controle-moment op in reguliere netwerkbeheerprocedures.
+
+Gebruik standaardcommando’s zoals dir nvram: (switch) of show startup-config (router) om dit te verifiëren.
+
+5. Zorg voor netwerkbeveiliging in combinatie met configuratiebeheer
+
+Beveilig de toegang tot apparaten met sterke wachtwoorden en versleutelde beheerprotocollen.
+
+Zorg dat alleen geautoriseerd personeel configuraties kan wijzigen.
+
+Implementeer rollen en toegangsrechten om ongewenste configuratiewijzigingen te voorkomen.
+
+6. Test configuraties in een omgeving zoals Cisco Packet Tracer
+
+Voer wijzigingen eerst uit in een testomgeving om risico’s voor de productieomgeving te minimaliseren.
+
+Controleer of de configuratie correct wordt geladen en opgeslagen bij herstarten.
