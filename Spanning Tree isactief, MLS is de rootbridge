@@ -1,0 +1,227 @@
+Omschrijving
+
+Het doel is om te kijken of de Spanning Tree actief is en dat MLS de rootbridge is.                       (whoever made this, his bumass link to the website over hoe spanning tree werkt dont even work)
+
+
+
+
+Uitvoering
+
+Zorg dat je in priviledged mode zit! (“Enable” in de switch).
+
+Rood: Met “Show spanning-tree” kan je zien op welke interface de spanning tree actief is. Als de informatie op de afbeelding hieronder niet te zien is betekend het dat de spanning-tree niet aan staat. <-------------------- ROOD
+
+Blauw: Met “Show spanning-tree” kan je ook zien wat de rootbridge is. Op de foto hieronder zie je dat de bridge op de switch waar ik op zit ook de root is. <-------------------------------------- BLAUW
+
+
+
+
+
+Verwachting
+
+Met het gegeven commando “show spanning-tree” kun je zien of de spanning tree aan staat en wat de rootbridge is.
+
+Switch# show spanning-tree <---------------------------------------------------------ROOD
+VLAN0001
+  Spanning tree enabled protocol ieee
+  Root ID      Priority    24577
+              This  bridge is  the root <----------------------------------------- BLAUW
+              Hello time 2 sec max age 20 sec forward delay 15 sec
+
+
+
+
+
+
+
+
+
+Impact
+
+Het correct functioneren van Spanning Tree Protocol (STP) en het bepalen van de juiste root bridge zijn essentieel voor een stabiel en veerkrachtig switching-netwerk. 
+Wanneer de MLS als root bridge optreedt, kan dit zowel positieve als negatieve gevolgen hebben, afhankelijk van het ontwerp en de bedoeling van de omgeving.
+
+Hieronder worden de belangrijkste risico’s en gevolgen beschreven:
+
+
+1. Verhoogd risico bij een ongewenste root bridge
+
+Als de MLS niet bewust als root bridge is gekozen, kan dit tot ongewenste netwerktopologie leiden. 
+
+Een verkeerd geplaatste root bridge kan resulteren in:
+Suboptimale datastromen (omwegen via niet-optimale paden)
+Onnodig hoge latency
+Overbelasting van uplinkinterfaces
+Slechtere performance voor bedrijfskritische applicaties
+
+Een root bridge moet altijd op een bewuste en strategische locatie worden geplaatst.
+
+
+2. Vergroot risico op loops bij misconfiguratie
+
+Hoewel STP loops voorkomt, kan een verkeerde root of foutieve prioriteit het netwerk kwetsbaarder maken voor:
+Tijdelijke loops
+Onnodige STP-herberekeningen (topology changes)
+Instabiliteit tijdens failovers
+
+Dit leidt in de praktijk tot packet loss, vertragingen en mogelijke downtime.
+
+
+3. Afhankelijkheid van een centraal punt dat mogelijk niet redundant is
+
+Als de MLS fungeert als root bridge, maar onvoldoende redundantie heeft (bijv. geen tweede core-switch als backup), ontstaat een single point of failure. 
+
+Bij uitval van de MLS:
+Zal het STP-netwerk opnieuw convergeren
+Kan het verkeer tijdelijk tot stilstand komen
+Vallen sommige VLAN’s of paden mogelijk volledig uit
+
+Dit is bijzonder kritisch in productieomgevingen.
+
+
+4. Mogelijke impact op netwerksegmentatie of VLAN-routing
+
+Omdat een MLS ook routing verzorgt tussen VLAN’s, kan het ongewenst combineren van STP-rootfunctionaliteit en routing tot extra belasting leiden:
+Hogere CPU-utilisatie
+Verlaagde doorvoersnelheid
+Vertraging bij ARP- en MAC-table updates
+
+Dit kan netwerkprestaties beïnvloeden wanneer het apparaat niet is ontworpen om beide rollen intensief te dragen.
+
+
+5. Afwijking van best practices
+
+Een root bridge behoort duidelijk gepland, gedocumenteerd en beveiligd te zijn. 
+
+Als de MLS root is zonder expliciete ontwerpbeslissing:
+Voldoet het netwerk niet aan common best practices
+Is de kans groter dat netwerkengineers foutieve aannames maken
+Wordt troubleshooting complexer
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Advies
+
+Om de betrouwbaarheid, veiligheid en voorspelbaarheid van het STP-gedrag te waarborgen, adviseren we de volgende maatregelen:
+
+
+1. Stel bewust de juiste root bridge in
+
+Controleer of de MLS daadwerkelijk de juiste keuze is als root bridge.
+Indien ja, verlaag dan de STP-prioriteit expliciet om ervoor te zorgen dat deze switch altijd de rol van root behoudt:
+
+
+spanning-tree vlan 1 priority 0
+
+
+Indien nee, stel dan de juiste core-switch of distributieswitch in als root:
+
+
+spanning-tree vlan 1 priority 4096
+
+
+Waarom belangrijk:
+Zo voorkomt u dat willekeurige switches root worden door bijvoorbeeld herstarts of toevoeging van nieuwe apparatuur.
+
+
+2. Configureer een secondary root bridge
+
+Volg best practices door een tweede switch te configureren als backup root:
+
+
+spanning-tree vlan 1 priority 8192
+
+
+Dit zorgt voor:
+Snellere failover
+Minder STP-topology-changes
+Betere netwerkstabiliteit
+
+
+3. Verifieer STP mode en optimaliseer indien nodig
+
+Zorg dat alle switches dezelfde STP-variant gebruiken, bij voorkeur Rapid PVST+ of MST in grotere omgevingen.
+
+
+spanning-tree mode rapid-pvst
+
+
+Dit verbetert:
+Convergentietijd
+Stabiliteit
+Prestaties bij interfaceverstoringen
+
+
+4. Harden het STP-gedrag
+
+Implementeer beveiligingsmechanismen:
+Root Guard op access-uplinks om te voorkomen dat ongewenste switches zich als root aanmelden
+
+
+spanning-tree guard root
+
+
+BPDU Guard op accesspoorten om loops door verkeerd aangesloten apparaten te voorkomen
+
+
+spanning-tree bpduguard enable
+
+
+Deze maatregelen blokkeren automatisch poorten die mogelijk risico’s vormen.
+
+
+5. Controleer redundante verbindingen en linkcosts
+
+Zorg dat de paden naar de root bridge logisch en efficiënt zijn.
+Controleer:
+Linkkosten
+Bandbreedte
+Redundante uplinks
+EtherChannels (indien aanwezig)
+
+Optimaliseer zo nodig om onnodige blocking states te voorkomen.
+
+
+6. Documenteer de volledige STP-topologie
+
+Voor beheersbaarheid en auditdoeleinden:
+Leg vast welke switch de root is
+Documenteer de secondary root
+Noteer welke paden actief zijn
+Beschrijf de logic achter de gekozen structuur
+
+Dit voorkomt verwarring bij wijziging of uitbreiding van het netwerk.
+
+
+Samenvatting
+
+STP is noodzakelijk om loops in het netwerk te voorkomen. 
+Het feit dat de MLS momenteel als root bridge fungeert is acceptabel mits dit bewust is en overeenkomt met het netwerkontwerp. 
+Indien dit niet het geval is, kan het leiden tot prestatieproblemen, instabiliteit en beveiligingsrisico’s.
+Door strategisch root bridge-beheer, correcte prioriteitinstellingen, STP-hardening en documentatie wordt een veilig, efficiënt en stabiel netwerk gegarandeerd.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
