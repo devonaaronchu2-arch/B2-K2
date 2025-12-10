@@ -1,0 +1,179 @@
+Omschrijving
+
+Bij deze taak zet je DTP (Dynamic Trunking Protocol) uit op netwerkpoorten van een switch. DTP zorgt er normaal voor dat poorten automatisch een trunk-verbinding kunnen maken.
+
+Als je DTP helemaal uitzet, kunnen poorten dit niet meer automatisch doen. Dat is goed voor de veiligheid en voorkomt fouten in het netwerk.
+
+
+
+
+Uitvoering
+
+
+show dtp interface [naam van de poort] 
+
+show dtp interface [naam van de poort] 
+
+
+
+
+Switch> enable
+Switch# show interfaces fa0/1 switchport
+Name: Fa0/1 <-------------------------------------------------------------- geen idee wrm dit er staat ngl. ass voorbeeld i never seen this before. 
+
+Switchport enabled: enabled
+Administrative mode: dynamic auto
+operational mode: static access
+Administrative trunking encapsulation: negogiated
+Administrative trunking encapsulation: Native
+negogiation of trunking: on
+Access mode VLAN: 1 (default)
+Trunking native mode VLAN: 1 (default)
+Voice VLAN: none
+Administrative private-vlan host-assosiation: none
+Administrative private-vlan mapping: none
+Administrative private-vlan trunk native VLAN: none
+Administrative private-vlan trunk encapsulation: dotiq <---------- either dotiq of dotLq   (geen idee wat er stond maar dit hoef je toch niet te typen)
+Administrative private-vlan trunk normal VLANs: none
+Administrative private-vlan trunk private VLANs: none
+Operational private-vlan: none
+Trunking  VLANs enabled: All
+Pruning Vlans enabled: 2-1001
+Capture mode disabled
+capture VLANS allowed: ALL
+protected: false
+unknown unicast blocked: disabled
+unknown multicast blocked: disabled
+appliance trust: none
+
+
+
+GEEEEN IDEE WAT JE MOET OMCIRKELEN HIER NGL
+
+
+
+
+
+
+
+
+
+
+Impact
+
+Het uitschakelen van Dynamic Trunking Protocol (DTP) op switchpoorten heeft meerdere belangrijke gevolgen voor zowel de veiligheid als de stabiliteit van het netwerk. 
+DTP is standaard geactiveerd op veel Cisco-switches, waardoor poorten automatisch trunkverbindingen kunnen opzetten wanneer zij hiervoor een onderhandeling ontvangen. 
+Hoewel dit handig kan lijken, brengt het aanzienlijke risico’s met zich mee.
+
+
+1. Verhoogde netwerkbeveiliging
+
+Door DTP uit te schakelen worden poorten niet langer automatisch trunk, wat voorkomt dat ongeautoriseerde apparatuur een trunkverbinding opzet. 
+
+Dit vermindert het risico op o.a. VLAN-hopping-aanvallen, waarbij kwaadwillenden toegang proberen te krijgen tot VLAN’s waar zij geen rechten voor hebben.
+
+
+2. Vastlegging van voorspelbaar gedrag
+
+Het uitschakelen van DTP zorgt ervoor dat switchpoorten zich altijd gedragen zoals geconfigureerd (bijv. als access-poort). 
+Dit voorkomt onverwachte trunkvorming wanneer switches of endpoints verkeerd geconfigureerd zijn. 
+Hierdoor wordt foutgevoeligheid sterk verminderd.
+
+
+3. Bescherming tegen configuratiefouten
+
+Met DTP ingeschakeld kan een foutief aangesloten kabel of een verkeerd ingestelde switch een ongewenste trunk tot stand brengen. Dit kan leiden tot: 
+
+onbedoelde uitbreiding van VLAN’s naar ongewenste segmenten.
+broadcaststorms.
+loops.
+prestatieproblemen of complete netwerkuitval.
+
+Door DTP uit te schakelen wordt deze foutmarge geminimaliseerd.
+
+
+4. Betere controle in complexe netwerkomgevingen
+
+In grotere netwerken waar meerdere switches en VLAN’s actief zijn, kan automatische trunking voor onduidelijkheid en misconfiguraties zorgen. 
+Door DTP uit te schakelen blijft de netwerkarchitectuur voorspelbaar en beheersbaar.
+
+
+
+
+
+
+
+
+
+
+
+
+Advies
+
+Op basis van de huidige configuratie en best practices voor netwerkbeveiliging en beheer bevelen wij het volgende aan:
+
+1. Schakel DTP standaard uit op alle access-poorten
+
+Configureer alle poorten die eindapparatuur (pc’s, printers, camera’s, etc.) verbinden als static access en zet DTP expliciet uit met het commando:
+
+
+switchport mode access
+switchport nonegotiate
+
+
+Dit voorkomt dat deze poorten ooit trunk kunnen worden.
+
+
+2. Configureer trunkpoorten handmatig en bewust
+
+Gebruik uitsluitend handmatig ingestelde trunkpoorten op uplinks tussen switches. Hierdoor behoudt u volledige controle over welke switchkoppelingen VLAN-informatie mogen uitwisselen.
+Bijvoorbeeld:
+
+
+switchport mode trunk
+switchport nonegotiate
+
+
+3. Documenteer de configuratie en netwerkstructuur
+
+Voor een stabiele en veilige infrastructuur is het cruciaal dat documentatie up-to-date blijft. Leg voor elke switch vast:
+welke poorten trunk zijn,
+welke VLAN’s toegestaan zijn op die trunks,
+welke poorten access-poorten zijn,
+aan welk apparaat of welke afdeling ze gekoppeld zijn.
+
+
+4. Voer periodieke audits uit
+
+Controleer regelmatig (bijvoorbeeld kwartaalbasis):
+of er onbedoelde trunkpoorten actief zijn,
+of access-poorten nog steeds correct functioneren,
+of er afwijkingen zijn in VLAN- en trunkconfiguraties.
+
+
+Gebruik hiervoor commando’s zoals:
+show dtp interface
+show interfaces switchport
+show vlan brief
+show interfaces trunk
+
+
+5. Versterk beveiliging door aanvullende maatregelen
+
+Combineer het uitschakelen van DTP met andere switch hardening-maatregelen, zoals:
+Port security inschakelen,
+Ongebruikte poorten uitschakelen,
+BPDU Guard op access-poorten,
+VLAN pruning op trunklijnen.
+
+6. Zorg voor interne bewustwording
+
+Informeer uw IT-beheerteam dat automatische trunking ongewenst en potentieel gevaarlijk kan zijn. Zorg dat alle beheerders enkel bewuste trunkconfiguraties uitvoeren om risico’s te minimaliseren.
+
+
+
+
+
+
+
+
