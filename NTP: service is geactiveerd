@@ -1,0 +1,169 @@
+Omschrijving
+
+In deze opdracht heb ik een netwerk opgebouwd in Cisco Packet Tracer waarin ik de **Network Time Protocol (NTP)** heb geconfigureerd om tijdsynchronisatie tussen netwerkapparaten mogelijk te maken.
+
+
+
+
+Uitvoering
+
+
+
+1. Netwerk opgebouwd:
+    - Ik heb een netwerk ontworpen met een **Server** en een **Router**.
+    - Beide apparaten zijn verbonden via een switch of direct met een geschikte kabel.
+
+
+2. Server ingesteld als NTP-server:
+    - Ik heb een **Server-apparaat** toegevoegd (via End Devices).
+    - In het tabblad **Services > NTP** heb ik de **NTP-service geactiveerd**.
+    - Ik heb een tijd en datum ingesteld zodat de server als tijdbron kon dienen.
+    - Het IP-adres van de server heb ik ingesteld op bijvoorbeeld `192.168.1.10`.
+
+
+3. Router ingesteld als NTP-client:**
+    - Ik heb de CLI van de router geopend.
+    - Vervolgens heb ik het volgende commando ingevoerd om de router met de NTP-server te verbinden:
+
+
+4. Verificatie uitgevoerd:
+    - Met het commando `show ntp status` heb ik gecontroleerd of de router succesvol synchroniseerde met de NTP-server.
+    - Met `show clock` heb ik gecontroleerd of de interne klok van de router correct werd bijgewerkt.
+
+
+Verwachting
+
+Router> Enable
+Router# conf t
+Router(config)# ntp server 1922.168.1.10    (voorbeeld ip denk ik)
+Router(config)# end
+Router##show ntp status
+
+Clock is unsynchronized, stratum 16, no reference clock
+nominal freq is 250.0000 Hz, actual freq is 249.9990 Hz, precision is 2**24
+reference time is 00000000.00000000 (00:00:00.000 UTC Mon Jan 1 1990)
+clock offset is 0.00 msec, peer dispersion is 0.00 msec.
+loopfilter state is 'FSET' (Drift set from file), drift is - 0.000001193 s/s system poll interval is 4, never updated
+
+Router# show clock
+
+*0:6:338.485 UTC Mon Mar 1 19933
+
+
+
+
+
+
+
+
+
+
+
+
+
+Impact
+
+Het configureren van Network Time Protocol (NTP) op netwerkapparatuur heeft belangrijke operationele voordelen, maar kan ook enkele implicaties hebben voor het beheer en de betrouwbaarheid van het netwerk. Hieronder volgt de gedetailleerde impactanalyse.
+
+
+1. Verbeterde tijdsynchronisatie in het netwerk
+
+NTP zorgt ervoor dat alle netwerkapparaten dezelfde, nauwkeurige tijd gebruiken. Dit heeft directe voordelen voor:
+Logging en auditing: tijdstempels zijn consistent, wat noodzakelijk is bij incidentonderzoek;
+Beveiliging: veel beveiligingsprotocollen vertrouwen op correcte tijd (bijv. certificaatvalidatie, AAA-logins, syslog);
+Troubleshooting: maakt correlatie tussen gebeurtenissen van uiteenlopende apparaten mogelijk.
+
+
+2. Verhoogde betrouwbaarheid van monitoring- en analysesystemen
+
+Tools zoals SNMP, syslog en SIEM-platformen werken efficiënter wanneer tijdstempels kloppen. Door NTP te activeren wordt:
+De interpretatie van meldingen eenvoudiger;
+De tijdlijn van incidenten correct opgebouwd;
+False positives (door verkeerde tijdstempels) verminderd.
+
+
+3. Geen merkbare impact op netwerkverkeer
+
+NTP genereert zeer weinig dataverkeer. De periodieke polling tussen router en server (in Packet Tracer of in productie) belast het netwerk minimaal.
+Er is geen vertraging in reguliere datastromen;
+De CPU- en geheugenbelasting op apparaten blijft laag.
+
+
+4. Afhankelijkheid van de NTP-server
+
+NTP introduceert een lichte afhankelijkheid:
+Als de NTP-server niet beschikbaar is, schakelt de router terug naar de interne klok;
+Tijd blijft dan wel doorlopen, maar minder nauwkeurig;
+Bij langere uitval kunnen tijdsverschillen ontstaan die impact hebben op logs en beveiligingsprocessen.
+In een labomgeving zoals Packet Tracer is dit effect beperkt, maar in productieomgevingen is dit een reëel risico.
+
+
+5. Geen directe risico’s voor uptime
+
+Het configureren van NTP vereist geen herstart van netwerkapparatuur, en leidt niet tot onderbreking van netwerkdiensten.
+De impact op gebruikers en bedrijfskritische processen is daardoor nihil.
+
+
+
+
+
+
+
+
+Advies
+
+Op basis van de uitgevoerde configuratie en de resultaten in Packet Tracer adviseren wij het volgende voor een professionele, veilige en robuuste implementatie van NTP.
+
+
+1. Gebruik een redundante NTP-infrastructuur
+
+In productie raden wij aan om minimaal twee NTP-servers te gebruiken:
+Eén primaire en één secundaire tijdbron;
+Eventueel aangevuld met een externe bron (bijv. pool.ntp.org of GPS-gebaseerde toestellen).
+Dit verhoogt de beschikbaarheid en voorkomt tijdsafwijkingen bij serveruitval.
+
+
+2. Beveilig NTP-verkeer
+
+In Cisco Packet Tracer is beveiliging beperkt, maar in een echte omgeving is het belangrijk om:
+NTP-authentication te configureren met MD5-sleutels om spoofing te voorkomen;
+ACL’s in te stellen die alleen toestemming geven aan aangewezen apparaten om NTP-updates te ontvangen;
+Interne clients te verhinderen om ongecontroleerde externe tijdbronnen te gebruiken.
+
+
+3. Controleer regelmatig de synchronisatiestatus
+
+Wij adviseren een periodieke controle (bijv. maandelijks of na netwerkonderhoud):
+show ntp status om te bevestigen dat de router "synchronized" is;
+show clock detail om drift of afwijkingen te detecteren;
+Monitoring van tijdsverschillen via syslog of SNMP.
+Dit zorgt ervoor dat afwijkingen tijdig worden gedetecteerd.
+
+
+4. Documenteer tijdconfiguratie en tijdzones
+
+Voor consistentie en auditbaarheid adviseren wij:
+Vastleggen welke apparaten NTP-clients zijn;
+Noteren welke servers als tijdbron worden gebruikt;
+Correct instellen van tijdzones en zomertijdregelingen;
+Configuratie in beheerprocedures opnemen.
+Documentatie voorkomt fouten bij wijzigingen of uitbreidingen van de netwerkstructuur.
+
+
+5. Integreer NTP met andere netwerkdiensten
+
+Zeker in productieomgevingen is het verstandig om NTP te koppelen aan:
+Syslog-servers;
+AAA-servers;
+Firewalls en beveiligingssystemen;
+Back-up- en monitoringtools.
+Consistente tijd zorgt ervoor dat al deze systemen correct samenwerken.
+
+
+6. Voer NTP-tests uit na wijzigingen in netwerk- of serverconfiguratie
+
+Wij adviseren om na onderhoud of wijzigingen (bijv. routerherstart, IP-wijzigingen, serverupdates):
+De NTP-synchronisatie opnieuw te controleren;
+Te verifiëren dat de polling-intervallen en tijdstatus normaal functioneren;
+Eventuele afwijkingen direct te corrigeren.
+
