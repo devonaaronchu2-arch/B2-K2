@@ -1,0 +1,175 @@
+Omschrijving
+
+Bridge Protocol Data Unit Guard (afgekort BPDU-guard) is een beveiliging in switches dat wordt gebruikt zodat niet verwachte devices invloed uitoefenen op de spanning-tree. 
+Het zorgt ervoor dat apparaten die geen deel uitmaken van het core netwerk zoals eindapparaten geen BPDU’s naar de switch kan sturen, wat netwerkproblemen kan voorkomen.
+
+
+
+Uitvoering
+
+Show running-config
+
+
+
+
+Verwachting
+
+In dit netwerk is de BPDU-guard niet ingeschakeld omdat er bij het commando onder de interfaces geen “**spanning-tree bpduguard enable**” staat.
+
+interface FastEthernet0/1
+!
+interface FastEthernet0/2
+!
+interface FastEthernet0/3
+!
+
+
+
+Als BPDU-guard is ingeschakeld zou het volgende te zien moeten zijn bij het uitvoeren van het #show running-config commando.
+
+interface FastEthernet0/1
+  spanning-tree bpduguard enable <----------------------------omcirkel dit met de interface erbij op je examen op je foto
+!
+interface FastEthernet0/2
+!
+interface FastEthernet0/3
+!
+
+
+
+
+
+
+
+
+
+
+
+Impact
+
+Het niet ingeschakeld hebben van BPDU-Guard op access-poorten heeft belangrijke gevolgen voor zowel de veiligheid als de stabiliteit van het netwerk. 
+BPDU-Guard is ontworpen om te voorkomen dat onbevoegde of foutief aangesloten apparaten het spanning-tree-proces beïnvloeden. Wanneer BPDU-Guard ontbreekt, brengt dit meerdere risico’s met zich mee:
+
+
+1. Risico op netwerkuitval door spanning-tree manipulatie
+
+Zonder BPDU-Guard kunnen eindgebruikersapparaten of ongeautoriseerde switches BPDU’s (Bridge Protocol Data Units) naar de hoofd-switch sturen. 
+Hierdoor kan de spanning-tree topologie onverwacht wijzigen. 
+
+Dit kan leiden tot:
+blokkeren van kritieke uplinks,
+herverkiezing van root bridge,
+verlies van connectiviteit voor complete VLAN’s,
+langdurige downtime terwijl spanning-tree zich herstelt.
+In productieomgevingen kan dit ernstige verstoring veroorzaken.
+
+
+2. Verhoogd risico op loops in het netwerk
+
+Een verkeerd aangesloten of ongeautoriseerd netwerkapparaat kan loops introduceren wanneer STP BPDU’s niet worden gedetecteerd of geblokkeerd. 
+
+Dit kan leiden tot:
+broadcast storms,
+extreem hoge CPU-belasting op switches,
+totale netwerkverstopping waardoor geen enkel apparaat nog verbinding kan maken.
+
+Zonder BPDU-Guard is een enkel foutief aangesloten kabel of access point al genoeg om het netwerk te ontregelen.
+
+
+3. Kwetsbaarheid voor kwaadwillende acties (Layer 2 attacks)
+
+Zonder BPDU-Guard kunnen kwaadwillenden met eenvoudige tools (bijv. Yersinia) zelf BPDU’s injecteren in het netwerk met als doel:
+zichzelf root bridge maken,
+het verkeer omleiden via hun apparaat,
+afluisteren van lokaal netwerkverkeer,
+man-in-the-middle-aanvallen opzetten.
+
+Zeker in omgevingen waar verschillende gebruikers toegang hebben tot netwerk-aansluitpunten vormt dit een serieus beveiligingsrisico.
+
+
+4. Onvoorspelbaar gedrag van access-poorten
+
+Access-poorten met BPDU-Guard uit kunnen onvoorspelbaar reageren wanneer zij BPDU’s ontvangen, wat leidt tot:
+instabiele verbindingen,
+netwerkvertragingen,
+problemen bij VoIP-telefoons, printers of andere netwerkapparatuur.
+
+Dit kan aanzienlijke impact hebben op bedrijfsprocessen die afhankelijk zijn van een stabiel netwerk.
+
+
+
+
+
+
+
+
+
+
+
+
+
+Advies
+
+1. Schakel BPDU-Guard in op alle access-poorten
+
+Dit is een industriestandaard best practice en voorkomt dat eindgebruikersapparatuur invloed heeft op spanning-tree.
+Aanbevolen configuratie per access-poort:
+
+interface FastEthernet0/x
+ switchport mode access
+ spanning-tree bpduguard enable
+
+
+Hiermee wordt de poort direct uitgeschakeld (err-disable) zodra een BPDU wordt gedetecteerd. Zo wordt direct voorkomen dat onbedoelde spanning-tree-wijzigingen optreden.
+
+
+2. Overweeg het gebruik van Portfast in combinatie met BPDU-Guard
+
+Voor access-poorten die uitsluitend eindgebruikersapparatuur verbinden, is het aanbevolen om spanning-tree portfast te gebruiken.
+Dit zorgt voor:
+
+snellere verbindingen voor pc’s en telefoons,
+meer stabiliteit bij herstarten van apparaten,
+minder STP-wachttijden.
+In combinatie met BPDU-Guard blijft het netwerk veilig.
+
+
+3. Documenteer alle poortrollen binnen het netwerk
+
+Leg vast welke poorten:
+uplinks zijn,
+trunkpoorten zijn,
+access-poorten voor werkplekken zijn,
+speciale apparatuur verbinden.
+
+Dit maakt het makkelijker om consistentie in beveiligingsconfiguraties te waarborgen.
+
+
+4. Voer periodieke controles uit op spanning-tree instellingen
+
+Regelmatige audits zorgen dat beveiligingsfeatures niet ontbreken of onbewust zijn uitgeschakeld. Controleer minstens elk kwartaal de spanning-tree-status via:
+
+show spanning-tree summary
+show run | include bpduguard
+show errdisable recovery
+
+
+5. Activeer automatische herstelmechanismen (optioneel)
+
+Indien gewenst kan errdisable recovery worden gebruikt om poorten automatisch te herstellen na een BPDU-trigger. Dit is vooral handig in omgevingen waar regelmatig apparatuur wordt verplaatst of vervangen:
+
+errdisable recovery cause bpduguard
+errdisable recovery interval 300
+
+
+Let op: herstel mag nooit de beveiliging ondermijnen — ongeautoriseerde BPDU’s moeten altijd aanleiding blijven geven tot een blokkade.
+
+
+6. Train IT-medewerkers in Layer 2-beveiligingsprincipes
+
+Het correct toepassen van BPDU-Guard, Portfast en STP-instellingen vraagt kennis van Layer 2-mechanismen. Door interne medewerkers te trainen kan menselijke fout worden verminderd en blijft het netwerk toekomstbestendig.
+
+
+
+
+
