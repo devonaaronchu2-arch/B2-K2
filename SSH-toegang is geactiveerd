@@ -1,0 +1,232 @@
+Omschrijving
+
+Deze beheertaak omvat het inschakelen van **Secure Shell (SSH)** op het netwerkapparaat, ter vervanging van het onveilige Telnet-protocol. Daarmee verloopt alle afstandsbeheer in een versleutelde sessie, wat afluisteren of manipuleren van beheerverkeer voorkomt. 
+
+
+
+
+
+Uitvoering
+
+Controleer SSH-status:
+
+Switch# show ip ssh
+
+Hiermee zie je of SSH ingeschakeld is en welke sleutelgrootte actief is.
+
+Controleer VTY-configuratie:
+
+Switch# show run | section line vty
+
+Let op transport input ssh onder de VTY-lijnen.
+
+
+
+
+
+
+
+
+
+Verwachting
+
+De output van show ip ssh toont:
+
+SSH Enabled
+
+RSA key bits: bijvoorbeeld 2048
+
+In de VTY-configuratie staat transport input ssh en zijn Telnet-opties uitgeschakeld.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Impact
+
+Het correct inschakelen van SSH-toegang op netwerkapparatuur heeft zowel positieve als risicogerelateerde impact op de beveiliging en het beheer van het netwerk. SSH vervangt Telnet en zorgt voor versleutelde communicatie tussen de beheerder en het apparaat.
+
+
+1. Sterk verbeterde beveiliging van beheertoegang (positief & cruciaal)
+
+Door SSH te gebruiken in plaats van Telnet worden alle gegevens, waaronder wachtwoorden, configuratiecommando’s en sessiegegevens, versleuteld verzonden over het netwerk. Dit voorkomt dat kwaadwillenden:
+mee kunnen kijken met configuraties
+wachtwoorden kunnen onderscheppen
+beheeraccounts kunnen misbruiken
+toegang kunnen krijgen tot de volledige infrastructuur
+
+SSH sluit hiermee één van de grootste beveiligingsrisico’s van traditionele netwerkbeheertoegang uit.
+
+
+2. Lagere kans op succesvolle cyberaanvallen
+
+Zonder versleuteling is een simpele man-in-the-middle aanval voldoende om toegang te krijgen tot switches en routers. Door SSH te activeren wordt:
+sniffing van beheerwachtwoorden voorkomen
+sessiekaping onmogelijk gemaakt
+laterale beweging door een aanvaller sterk bemoeilijkt
+
+Hierdoor neemt de kans op een netwerkcompromis aanzienlijk af.
+
+
+3. Beheer conform beveiligingsstandaarden en auditvereisten
+
+Het gebruik van SSH is verplicht of sterk aanbevolen binnen:
+ISO27001
+NIST
+CIS Controls
+BIO (overheidsnormen)
+interne ICT-securityrichtlijnen
+
+Het inschakelen van SSH zorgt ervoor dat de organisatie compliant is met moderne beveiligingseisen en auditcontroles. Telnet wordt door auditors altijd als ernstig beveiligingslek beschouwd.
+
+
+4. Betere controle over beheerconnecties
+
+Doordat in de VTY-configuratie het transportprotocol beperkt is tot SSH, wordt voorkomen dat onbeveiligde sessies per ongeluk worden gebruikt.
+Dit vergroot de beheersbaarheid en voorkomt menselijke fouten.
+
+
+5. Verlies van toegang als SSH verkeerd is geconfigureerd (operationeel risico)
+
+Indien SSH verkeerd wordt ingesteld — bijvoorbeeld een foutieve domain-name, ontbrekende RSA-sleutels of geen juiste gebruikersaccounts — kunnen beheerders mogelijk geen remote toegang meer krijgen tot het apparaat.
+
+Dit kan leiden tot:
+noodzakelijk fysiek bezoek aan locaties
+vertraging bij storingsoplossing
+verhoogde operationele kosten
+
+Het is dus essentieel dat de configuratie volledig en correct wordt uitgevoerd.
+
+
+
+
+
+
+
+
+
+
+
+Advies
+
+Om de voordelen van SSH volledig te benutten en eventuele risico’s te beperken, adviseren wij de volgende maatregelen. Deze adviezen zijn gebaseerd op best practices binnen professionele netwerkbeveiliging.
+
+
+1. Schakel Telnet volledig uit
+
+Zorg dat alleen SSH is toegestaan op de VTY-lijnen:
+
+
+line vty 0 4
+ transport input ssh
+
+
+Hierdoor kan per ongeluk nooit een onversleutelde Telnet-verbinding worden gebruikt.
+
+
+2. Gebruik sterke encryptiesleutels (minimaal 2048 bits)
+
+Genereer altijd een RSA-sleutel van voldoende sterkte:
+
+
+crypto key generate rsa general-keys modulus 2048
+
+
+Sleutels kleiner dan 1024 bits worden als onveilig beschouwd.
+
+
+3. Maak gebruik van ‘local users’ of AAA voor veilige authenticatie
+
+In plaats van een simpel VTY-wachtwoord:
+
+
+username admin privilege 15 secret <sterk wachtwoord>
+line vty 0 4
+ login local
+
+
+Of — voor grotere organisaties — activeer centrale authenticatie (RADIUS/TACACS+).
+
+
+4. Activeer SSH-versie 2
+
+SSHv1 bevat bekende kwetsbaarheden en mag niet worden gebruikt:
+
+
+ip ssh version 2
+
+
+5. Documenteer en standaardiseer de SSH-configuratie
+
+Stel een beheerbeleid op waarin wordt vastgelegd:
+welke gebruikers SSH-rechten hebben
+welke sleutelgrootte verplicht is
+vanaf welke IP-segmenten beheer is toegestaan
+hoe wachtwoorden worden beheerd en geroteerd
+hoe logging wordt opgeslagen
+
+Dit zorgt voor voorspelbaarheid, auditvoering en consistent beheer.
+
+
+6. Combineer SSH met toegangsbeperking via ACL’s
+
+Sta SSH-beheer alleen toe vanaf specifieke beheernetwerken.
+
+Voorbeeld:
+
+
+access-list 10 permit 192.168.1.0 0.0.0.255
+line vty 0 4
+ access-class 10 in
+
+
+Hierdoor kan niemand vanaf bijvoorbeeld het gastnetwerk of WiFi-netwerk het apparaat beheren.
+
+
+7. Implementeer logging en monitoring voor SSH-sessies
+
+Configureer:
+Syslog
+Login-attempt logs
+Failed login-alerts
+Event-monitoring
+
+Hiermee worden mislukte inlogpogingen en mogelijk misbruik vroegtijdig gesignaleerd.
+
+
+8. Test de configuratie zorgvuldig
+
+Na het activeren van SSH moet worden gecontroleerd:
+of beheer op afstand werkt
+of Telnet daadwerkelijk is geblokkeerd
+of het juiste gebruikersaccount kan inloggen
+of de encryptie correct wordt toegepast
+
+Zo wordt downtime door misconfiguraties voorkomen.
+
+
+
+Samenvatting voor de klant
+
+Het activeren van SSH verbetert de beveiliging van het netwerk aanzienlijk door het volledig versleutelen van beheercommunicatie en het uitschakelen van onveilige Telnet-toegang. 
+Wij adviseren het gebruik van sterke sleutels, toegangscontrole via ACL’s, centrale of lokale veilige gebruikersauthenticatie en uitgebreide monitoring. 
+Hiermee voldoet uw organisatie aan moderne beveiligingsnormen en is de beheertoegang tot uw netwerk professioneel en toekomstbestendig ingericht.
+
+
+
+
+
+
+
