@@ -1,0 +1,145 @@
+Omschrijving
+
+Door het upgraden van het IOS device blijft het device beschikken over de nieuwste functies en beveiligingsupdates, dit zorgt ervoor dat het netwerk veilig blijft. 
+
+
+
+Uitvoering
+
+# show version
+
+
+
+
+Verwachting 
+
+Door het uitvoeren van het commando # show version kan er gekeken worden of de laatste versie is geïnstalleerd op het IOS device. 
+
+
+LAAT FOTO ZIEN OP HET EXMANE DONT FORGET GANGELANG
+
+
+
+Impact
+
+
+Het upgraden van de IOS-software op netwerkapparatuur kan tijdelijke gevolgen hebben voor de beschikbaarheid van het netwerk en de diensten die daarop draaien. Hieronder volgt een overzicht van de te verwachten impact:
+
+
+1. Tijdelijke netwerkonderbreking
+
+Tijdens het uitvoeren van de upgrade moet het netwerkapparaat worden herstart. Hierdoor zullen alle actieve netwerkverbindingen die via dit apparaat lopen tijdelijk worden onderbroken. Dit kan resulteren in:
+Kort verlies van connectiviteit voor aangesloten eindgebruikers;
+Tijdelijke uitval van routing- of switchingfunctionaliteit;
+Onderbreking van services zoals DHCP-relay, VLAN-routing, trunking of PoE.
+
+
+2. Mogelijke impact op afhankelijkheden
+
+Indien het apparaat onderdeel is van een grotere netwerkstructuur (bijv. core/distributie-laag), kan de upgrade invloed hebben op:
+Redundant uitgevoerde paden (HSRP/VRRP/GLBP);
+Routingprotocollen (OSPF/EIGRP/RIP) die tijdelijk opnieuw moeten convergeren;
+Security-functies zoals ACL’s, port-security of firewalling.
+
+
+3. Risico op incompatibiliteit
+
+Een nieuwe IOS-versie kan gewijzigde of verplaatste configuratiecommando’s bevatten. Hierdoor bestaat een (klein) risico dat:
+Bestaande configuraties aangepast moeten worden;
+Verouderde functies niet langer worden ondersteund;
+Logging of monitoring output verandert.
+
+
+4. Prestatiewijzigingen
+
+Nieuwe IOS-releases bevatten optimalisaties en bugfixes. De impact kan daarom ook positief zijn, bijvoorbeeld:
+Betere performance;
+Verbeterde beveiliging;
+Hogere stabiliteit.
+Toch bestaat altijd de mogelijkheid dat bepaalde processen meer systeembronnen gebruiken dan voorheen.
+
+
+5. Geen impact op data
+De upgrade heeft geen invloed op opgeslagen configuraties of gegevensverkeer, behalve tijdelijke onderbreking. De running configuration blijft behouden zolang vooraf een correcte backup wordt gemaakt.
+
+
+
+
+
+Advies
+
+Om de upgrade veilig, gecontroleerd en met minimale impact uit te voeren, adviseren wij het volgende:
+
+
+1. Voer de upgrade uit buiten kantooruren
+
+Plan de werkzaamheden tijdens een onderhoudsvenster, bij voorkeur ’s avonds of in het weekend, om verstoring van bedrijfsprocessen te minimaliseren.
+
+
+2. Maak vooraf een volledige configuratie- en image-backup
+
+Exporteer de running- en startup-config naar een extern systeem;
+Bewaar de huidige IOS-image als fallback-mogelijkheid;
+Test indien mogelijk eerst in het Packet Tracer omgeving (zoals gedaan) of in een lab.
+
+
+3. Controleer compatibiliteit en release notes
+
+Voor de upgrade moet worden nagegaan:
+Of de nieuwe IOS-versie compatibel is met het model;
+Welke bugs in de nieuwe release opgelost zijn;
+Of er bekende issues zijn die betrekking hebben op gebruikte functies (VLANs, routing, spanning-tree, AAA, SNMP, etc.).
+
+
+4. Communiceer met stakeholders
+
+Breng eindgebruikers, management en eventuele externe partijen vooraf op de hoogte van:
+Het tijdstip van de werkzaamheden;
+De verwachte downtime;
+Eventuele risico’s en fallback-planning.
+
+
+5. Test na de upgrade uitgebreid
+
+Voer na het herstarten van het apparaat de volgende controles uit:
+show version om te bevestigen dat de juiste IOS-versie actief is;
+Controle van alle VLANs, routingtabellen en interface-statussen;
+Controle van security-instellingen (ACL’s, port-security, AAA);
+Pingt-testen binnen het LAN en naar externe netwerken;
+Verifiëren dat monitoringtools (SNMP/NetFlow) nog correct functioneren.
+
+
+6. Documenteer de wijziging
+
+Werk de interne documentatie bij met:
+Nieuwe IOS-versie;
+Datum en tijd van de upgrade;
+Eventuele afwijkingen tijdens of na de uitvoering;
+Nieuwe configuratie-backups.
+
+
+7. Overweeg structureel onderhoudsbeleid
+
+Wij adviseren om periodiek te controleren of nieuwere IOS-releases beschikbaar zijn. Regelmatige updates verkleinen de kans op beveiligingslekken en storingen.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
