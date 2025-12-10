@@ -1,0 +1,229 @@
+Omschrijving
+
+DHCP-snooping is een netwerktechniek, die wordt gebruikt om een local area network te beveiligen tegen ongeautoriseerde DHCP-servers.
+
+Dit stel je in op de switch
+
+
+
+
+Uitvoering
+
+Je moet op de poort zitten waar op de DHCP-server verbonden zit.
+Vervolgens doe je het volgende commando: ip dhcp snooping trust. <------------------------------------------------------------------------------------------------------------------------------------- DE COMMANDO
+
+
+
+
+
+Verwachting
+
+Voer dan “end” in.
+
+Daarna voer je het commando: show ip dhcp snooping. <------------------------------------------------------------------------------------------------------------------------------------- DE COMMANDO
+
+Vervolgens door op enter te drukken ga je over allen poorten heen en kan je zien of het aanstaat als je bij de poort komt die aangesloten is op de DHCP-server moet er yes staan.
+
+
+FastEthernet0/1                  no        no              unlimited
+  Custom circuit-Ids:
+FastEthernet0/2                  no        no              unlimited
+  Custom circuit-Ids:
+FastEthernet0/3                  no        no              unlimited
+  Custom circuit-Ids:
+FastEthernet0/4                  no        no              unlimited
+  Custom circuit-Ids:
+FastEthernet0/5                  no        no              unlimited
+  Custom circuit-Ids:
+FastEthernet0/6                  no        no              unlimited
+  Custom circuit-Ids:
+FastEthernet0/7                  no        no              unlimited
+  Custom circuit-Ids:
+FastEthernet0/8                  no        no              unlimited
+  Custom circuit-Ids:
+FastEthernet0/9                  no        no              unlimited
+  Custom circuit-Ids:
+GigabitEthernet0/1               yes       yes             unlimited <------------------------- HIER STAAT YES DUS OMCIRKELEN
+  Custom circuit-Ids:
+GigabitEthernet0/2               no       no               unlimited
+  Custom circuit-Ids:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Impact
+
+DHCP Snooping is een kritieke beveiligingsfunctie binnen moderne netwerken. Het zorgt ervoor dat alleen vertrouwde (trusted) DHCP-servers IP-adressen mogen uitdelen, terwijl alle andere poorten standaard als untrusted worden behandeld. 
+Hoewel DHCP Snooping is geactiveerd, kunnen er diverse risico’s blijven bestaan wanneer de configuratie niet volledig, niet correct, of niet consistent wordt toegepast.
+
+De belangrijkste impacten zijn:
+
+
+1. Risico op rogue DHCP-servers blijft bestaan
+
+Als niet alle DHCP-uplinks correct als trusted zijn aangewezen of als bepaalde accesspoorten onterecht trusted zijn, kunnen kwaadwillenden of verkeerd aangesloten apparaten:
+Valse DHCP-responses versturen
+Clients verkeerde IP-adressen, gateways of DNS-servers geven
+Man-in-the-middle-aanvallen uitvoeren
+Users omleiden naar nepservers of phishing-pagina’s
+
+Dit kan leiden tot grote netwerkverstoringen of security-incidenten.
+
+
+2. Verlies van IP-connectiviteit door foutieve snooping-configuratie
+
+Indien de DHCP-serverpoort niet als trusted is ingesteld:
+Worden DHCP-offers en ACK’s geblokkeerd
+Krijgen clients géén IP-adres
+Valt netwerktoegang op die switch geheel of gedeeltelijk uit
+
+Dit kan storingen veroorzaken voor volledige VLAN’s of fysieke verdiepingen/locaties.
+
+
+3. Verhoogde kans op MAC-, ARP- en IP-spoofing
+
+DHCP Snooping vormt de basis voor aanvullende beveiligingsmechanismen zoals:
+Dynamic ARP Inspection (DAI)
+IP Source Guard
+Als DHCP Snooping niet volledig geconfigureerd is, werken deze extra beveiligingslagen óf niet, óf onnauwkeurig. Hierdoor blijft het risico bestaan op:
+ARP-poisoning
+Spoofing van IP-adressen
+Interceptie van netwerkverkeer
+
+Dit kan leiden tot datalekken of manipulatie van verkeer.
+
+
+4. Onvoorspelbaar netwerkgedrag door inconsistente configuratie
+
+Een half-werkende DHCP-snooping-omgeving kan leiden tot:
+Intermittente connectiviteitsproblemen
+“Flapping” tussen wel en geen IP-adressen
+Moeilijk te traceren storingen
+Problemen bij het verbinden van nieuwe devices
+
+Dit vergroot de beheerlast en maakt troubleshooting complexer.
+
+
+5. Mogelijke compliance- en auditproblemen
+
+Veel securityrichtlijnen (o.a. NIST, ISO 27001, IEC 62443) vereisen dat onveilige netwerkdiensten zoals DHCP worden afgeschermd tegen misbruik.
+Indien DHCP Snooping niet juist is ingesteld, kan dit leiden tot:
+Verkeerde auditresultaten
+Niet voldoen aan interne beveiligingsstandaarden
+Risico op sancties of maatregelen van externe auditors
+
+
+
+Advies
+
+Om DHCP Snooping optimaal, veilig en betrouwbaar te laten functioneren, adviseren we de volgende maatregelen:
+
+
+1. Stel ALLE DHCP-uplinkpoorten expliciet in als trusted
+
+Identificeer alle poorten waarop legitieme DHCP-servers of relay-interfaces zijn aangesloten, en configureer:
+
+
+interface Gi0/1
+ ip dhcp snooping trust
+
+
+Zorg dat alle andere poorten standaard untrusted blijven.
+
+
+2. Beperk DHCP Snooping per VLAN
+
+Activeer DHCP Snooping uitsluitend op de VLAN’s waar DHCP daadwerkelijk wordt gebruikt, bijvoorbeeld:
+
+
+ip dhcp snooping vlan 10,20,30  
+
+
+Dit voorkomt onnodige belasting én foute blocking in andere VLAN’s.
+
+
+3. Stel rate-limiting in op untrusted poorten
+
+Voorkom DHCP starvation attacks door een maximum aantal DHCP-berichten per seconde in te stellen:
+
+
+interface Fa0/12
+ ip dhcp snooping limit rate 15
+
+
+Dit beschermt het netwerk tegen flood-aanvallen.
+
+
+4. Activeer aanvullende beveiligingsmechanismen
+
+Om de volledige kracht van DHCP Snooping te benutten:
+Dynamic ARP Inspection (DAI) inschakelen
+IP Source Guard activeren op accesspoorten
+
+Deze functies gebruiken DHCP Snooping-leases om spoofing te voorkomen.
+
+
+5. Controleer en documenteer regelmatig de DHCP Snooping-database
+
+Zorg dat de DHCP Snooping-bindings tabel wordt opgeslagen en persistent is:
+
+
+ip dhcp snooping database flash:snoop.db
+
+
+Documenteer:
+Trusted poorten
+Actieve VLAN’s
+DHCP-serverlocaties
+Officiële verantwoordelijkheden (beheerteam / netwerkbeheerder)
+
+Dit maakt troubleshooting en audits eenvoudiger.
+
+
+6. Monitor de configuratie periodiek
+
+Controleer regelmatig:
+show ip dhcp snooping
+show ip dhcp snooping binding
+
+
+Bevestig dat:
+Alle poorten correct zijn ingesteld
+Geen onverwachte trusted-poorten bestaan
+De binding database consistent is
+
+
+7. Zorg voor interne procedures voor wijzigingen
+
+Voorkom dat DHCP Snooping wordt gedeactiveerd of misconfiguraties worden ingevoerd tijdens:
+Verhuizingen
+Device swaps
+Switch upgrades
+Kabelwijzigingen
+
+Door het instellen van een change-procedure voorkomt u incidenten.
+
+
+
+Samenvatting
+
+DHCP Snooping biedt een essentiële beveiligingslaag tegen rogue DHCP-servers en IP-spoofingaanvallen. 
+Wanneer het correct is geactiveerd en volledig is geconfigureerd, draagt het aanzienlijk bij aan de betrouwbaarheid en veiligheid van het netwerk.
+Onvolledige of foutieve configuraties kunnen echter leiden tot verlies van netwerkconnectiviteit, security-incidenten en compliancyproblemen. 
+Met een zorgvuldig ingerichte trusted/untrusted-configuratie, aanvullende beveiligingsmaatregelen en goede documentatie wordt een stabiel en veilig netwerk gewaarborgd.
+
+
+
+
+
+
