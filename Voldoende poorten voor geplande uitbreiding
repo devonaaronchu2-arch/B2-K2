@@ -1,0 +1,121 @@
+Omschrijving
+
+zorgen dat er voldoende poorten komen voor een upgrade
+
+
+Uitvoering
+
+show interfaces status
+
+
+Verwachting
+
+hier kan je zien welke poorten aan staan en hoeveel het er zijn
+
+
+FOTO PLAATS FOTO OP DE EXAMEN ERVAN
+
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Impact
+
+Het in kaart brengen van de status van alle switchinterfaces heeft directe invloed op de voorbereiding en succesvolle uitvoering van een netwerkupgrade.
+
+
+1. Inzicht in beschikbare poorten
+
+Door het uitvoeren van het commando show interfaces status wordt duidelijk:
+Welke poorten actief gebruikt worden.
+Welke poorten vrij zijn voor uitbreiding of herindeling.
+Of er voldoende capaciteit beschikbaar is om nieuwe apparatuur aan te sluiten.
+Als er onvoldoende vrije poorten zijn, kan dit de geplande uitbreiding vertragen of onmogelijk maken, wat invloed heeft op de netwerkperformance en toekomstige groeimogelijkheden.
+
+
+2. Signaleren van problemen vóór de upgrade
+
+De interface-informatie kan problemen aan het licht brengen zoals:
+Poorten die in error-disabled staan.
+Verkeerde duplex- of speed-configuraties.
+Niet-functionerende bekabeling of defecte poorten.
+Onverwachte VLAN-toewijzingen.
+Wanneer deze issues vooraf niet worden geïdentificeerd, kan dit tijdens een upgrade leiden tot:
+Onvoorziene downtime.
+Verbindingsproblemen of netwerksegmentatie.
+Een onvolledige of mislukte upgrade.
+
+
+3. Betrouwbare planning van capaciteit en investeringen
+
+De inventarisatie maakt het mogelijk om:
+Nauwkeurig te bepalen of extra switches, modules of uplinks nodig zijn.
+Capaciteit en investeringen te plannen op basis van feitelijke gegevens.
+Risico’s te verminderen door voorbereid te zijn op benodigde hardwarewijzigingen.
+Dit verhoogt de voorspelbaarheid van de upgrade en voorkomt onnodige kosten of spoedbestellingen.
+
+
+4. Behoud van netwerkstabiliteit
+
+Door vooraf te weten welke poorten gebruikt worden voor kritieke verbindingen (servers, access points, routers) wordt voorkomen dat per ongeluk essentiële verbindingen worden onderbroken tijdens de upgrade.
+Dit beschermt de continuïteit van bedrijfsprocessen.
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Advies
+
+Op basis van de gevonden poortstatus adviseren wij het volgende:
+
+
+1. Documenteer alle poortbezetting en functionaliteit
+
+Maak een gedetailleerde inventaris van:
+Gebruikte poorten (met bijbehorende apparaten).
+Vrije poorten.
+Poorten met fouten of afwijkingen.
+Dit vormt de basis voor een betrouwbare upgradeplanning.
+
+
+2. Controleer en herstel poorten met fouten
+
+Heractiveer poorten die in error-disabled staan (na analyse van de oorzaak).
+Controleer foutmeldingen zoals link-flapping, speed/duplex mismatches of VLAN-inconsistenties.
+Test de fysieke bekabeling waar nodig.
+Het herstel van deze issues voorkomt problemen tijdens de upgrade.
+
+
+3. Voer capaciteitstoetsing uit
+
+Op basis van de beschikbare vrije poorten adviseren we:
+Indien voldoende poorten beschikbaar zijn: plan de upgrade volgens de huidige infrastructuur.
+Indien onvoldoende poorten beschikbaar zijn:
+Voeg extra switches toe, of
+Schakel ongebruikte of verouderde apparatuur uit, of
+Overweeg een modulaire switch met uitbreidingsmogelijkheden.
+
+
+4. Maak een upgradeplan met minimale impact
+
+Plan de werkzaamheden buiten kantooruren.
+Identificeer kritieke verbindingen en markeer deze zodat ze niet worden onderbroken.
+Maak back-ups van de huidige configuraties vóór de upgrade.
+Communiceer het wijzigingsvenster tijdig met betrokken medewerkers of afdelingen.
+
+
+5. Voer een test uit in een gecontroleerde omgeving
+
+Aangezien deze opdracht in Cisco Packet Tracer is uitgevoerd, is het verstandig:
+Het volledige upgradeproces eerst in de testomgeving na te bootsen.
+Alle configuraties en verbindingen te valideren voordat deze in productie worden uitgevoerd.
+
+
+6. Implementeer een continu monitoringsproces
+
+Na de upgrade adviseren wij:
+Regelmatig de status van alle interfaces te controleren.
+Logging en monitoring te activeren (SNMP, syslog).
+Trends te analyseren om toekomstige uitbreidingen tijdig te plannen.
